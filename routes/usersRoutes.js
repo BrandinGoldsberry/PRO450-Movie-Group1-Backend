@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const UserRouter = Express.Router();
 const jsonParser = bodyParser.json();
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const connectToMongo = (callback) => {
     mongoose.connect("mongodb+srv://main-app:0lB270dUkf2Yny4V@cluster0.kumhg.mongodb.net/Movies?retryWrites=true&w=majority", (err) => {
@@ -35,10 +36,14 @@ UserRouter.post("/login", jsonParser, (req, res) => {
         User.findOne({username: username}).exec((err, user) => {
             if (err) console.log(err);
             else if (user === null) {
-                res.status(400).json({"error": "user not found"});
+                res.status(400).json({"error": "User not found"});
             }
             else {
-                res.status(200).json({"user": user.username});
+                if(bcrypt.compare(pass, user.hashed_password)) {
+                    res.status(200).json({"user": user.username});
+                } else {
+                    res.status(400).json({"error": "Password invalid!"})
+                }
             }
         })
     });
