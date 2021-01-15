@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const ReviewRouter = Express.Router();
 const jsonParser = bodyParser.json();
 const mongoose = require("mongoose");
+const { ObjectID } = require("bson");
 
 const connectToMongo = (callback) => {
     mongoose.connect("mongodb+srv://main-app:0lB270dUkf2Yny4V@cluster0.kumhg.mongodb.net/Movies?retryWrites=true&w=majority", (err) => {
@@ -29,8 +30,8 @@ ReviewRouter.get("/get-review", (req, res) => {
 
 //Add Review
 ReviewRouter.post("/post-review", jsonParser, (req, res) => {
-    var user = req.body.userId;
-    var reviewText = req.body.bodyText;
+    var user = req.body.user;
+    var reviewText = req.body.reviewText;
     var rating = req.body.rating;
     var movieId = req.body.movieId;
     connectToMongo(() => {
@@ -38,9 +39,8 @@ ReviewRouter.post("/post-review", jsonParser, (req, res) => {
             movieId: movieId,
             rating: rating,
             review: reviewText,
-            userId: user
+            userId: new ObjectID(user)
         });
-
         newReview.save((err) => {
             if(err) console.log(err);
             else {
