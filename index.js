@@ -4,11 +4,11 @@ const cors = require("cors");
 const axios = require('axios');
 
 //import routes that CRUD users
-const usersRoutes = require("routes/usersRoutes.js");
+const usersRoutes = require("./routes/usersRoutes.js");
 //import routes that CRUD reviews
-const reviewsRoutes = require("routes/reviewsRoutes.js");
+const reviewsRoutes = require("./routes/reviewsRoutes.js");
 //imports routes that serve the front of the website
-const frontendRoutes = require("routes/frontendRoutes.js");
+const frontendRoutes = require("./routes/frontendRoutes.js");
 
 if(process.env.NODE_ENV !== "production") {
     require('dotenv').config();
