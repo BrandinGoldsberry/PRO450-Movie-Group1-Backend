@@ -7,7 +7,7 @@ app.use(cors());
 //import routes that CRUD users
 const usersRoutes = require("./routes/usersRoutes.js");
 //import routes that CRUD reviews
-const reviewsRoutes = require("./routes/reviewsRoutes");
+const reviewsRoutes = require("./routes/reviewsRoutes.js");
 //imports routes that serve the front of the website
 const frontendRoutes = require("./routes/frontendRoutes.js");
 
