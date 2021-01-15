@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const User = mongoose.model('users', mongoose.Schema({
+const User = mongoose.model('User', mongoose.Schema({
     fname: String,
     lname: String,
     street: String,
@@ -11,6 +11,6 @@ const User = mongoose.model('users', mongoose.Schema({
     phone: String,
     hashed_password: String,
     username: String
-}));
+}), "users");
 
 export default User;
