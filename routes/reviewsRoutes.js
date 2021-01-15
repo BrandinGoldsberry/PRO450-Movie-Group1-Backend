@@ -1,4 +1,5 @@
 const Review = require("../schema/review");
+const User = require("../schema/user");
 const Express = require("express");
 const bodyParser = require("body-parser");
 const ReviewRouter = Express.Router();
@@ -34,22 +35,24 @@ ReviewRouter.get("/get-review", (req, res) => {
 
 //Add Review
 ReviewRouter.post("/post-review", jsonParser, (req, res) => {
-    var user = req.body.user;
+    var email = req.body.email;
     var reviewText = req.body.reviewText;
     var rating = req.body.rating;
     var movieId = req.body.movieId;
     connectToMongo(() => {
-        let newReview = new Review({
-            movieId: movieId,
-            rating: rating,
-            review: reviewText,
-            userId: new ObjectID(user)
-        });
-        newReview.save((err) => {
-            if(err) console.log(err);
-            else {
-                res.status(200).send("Review submitted!");
-            }
+        User.findOne({ email }).exec((err, user) => {
+            let newReview = new Review({
+                movieId: movieId,
+                rating: rating,
+                review: reviewText,
+                userId: user._id
+            });
+            newReview.save((err) => {
+                if(err) console.log(err);
+                else {
+                    res.status(200).send("Review submitted!");
+                }
+            });
         });
     });
 });

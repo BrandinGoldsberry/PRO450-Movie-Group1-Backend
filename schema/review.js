@@ -6,6 +6,6 @@ const Review = mongoose.model('Review', Schema({
     rating: Schema.Types.Decimal128,
     review: String,
     userId: Schema.Types.ObjectId
-}));
+}), "reviews");
 
 module.exports = Review;
