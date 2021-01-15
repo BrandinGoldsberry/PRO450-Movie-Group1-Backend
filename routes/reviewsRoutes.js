@@ -15,6 +15,10 @@ const connectToMongo = (callback) => {
     });
 }
 
+ReviewRouter.get("/get-reviews-by-user", (req, res) => {
+
+});
+
 //Get Review
 ReviewRouter.get("/get-review", (req, res) => {
     connectToMongo(() => {
@@ -53,7 +57,7 @@ ReviewRouter.post("/post-review", jsonParser, (req, res) => {
 //Update Review
 ReviewRouter.put("/update-review", jsonParser, (req, res) => {
     var reviewId = req.body.reviewId;
-    var reviewText = req.body.bodyText;
+    var reviewText = req.body.reviewText;
     var rating = req.body.rating;
     var newVals = {
         bodyText: req.body.bodyText,

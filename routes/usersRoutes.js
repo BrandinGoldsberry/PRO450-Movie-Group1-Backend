@@ -14,14 +14,24 @@ const connectToMongo = (callback) => {
     });
 }
 
+UserRouter.post("/get-user-by-email", (req, res) => {
+    connectToMongo(() => {
+        User.findOne({email: req.params.email}).exec((err, user) => {
+            if (err) console.log(err);
+            else if (user === null) {
+                res.status(400).json({"error": "User not found!"});
+            } else {
+                res.status(200).json({"user": user});
+            }
+        });
+    })
+})
+
 UserRouter.post("/login", jsonParser, (req, res) => {
     var pass = req.body.password;
     var username = req.body.username;
     console.log(req.body.username);
     connectToMongo(() => { 
-        User.find().exec((err, users) => {
-            console.log(users);
-        })
         User.findOne({username: username}).exec((err, user) => {
             if (err) console.log(err);
             else if (user === null) {
