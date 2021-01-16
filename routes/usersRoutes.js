@@ -34,10 +34,8 @@ UserRouter.post("/get-user-by-email", (req, res) => {
 UserRouter.post("/login", jsonParser, (req, res) => {
     var pass = req.body.password;
     var username = req.body.username;
-    console.log(req.body);
     connectToMongo(() => {
         User.findOne({ username: username }).exec((err, user) => {
-            console.log(user);
             if (err) console.log(err);
             else if (user === null) {
                 res.status(400).json({"error": "User not found"});

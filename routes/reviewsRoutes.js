@@ -35,12 +35,15 @@ ReviewRouter.get("/get-review", (req, res) => {
 
 //Add Review
 ReviewRouter.post("/post-review", jsonParser, (req, res) => {
+    console.log(req.body);
     var email = req.body.email;
     var reviewText = req.body.reviewText;
     var rating = req.body.rating;
     var movieId = req.body.movieId;
+    console.log(email);
     connectToMongo(() => {
         User.findOne({ email }).exec((err, user) => {
+            console.log(user);
             let newReview = new Review({
                 movieId: movieId,
                 rating: rating,
