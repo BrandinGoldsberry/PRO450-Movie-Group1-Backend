@@ -20,7 +20,7 @@ const connectToMongo = (callback) => {
 
 UserRouter.post("/get-user-by-email", (req, res) => {
     connectToMongo(() => {
-        User.findOne({email: req.params.email}).exec((err, user) => {
+        User.findOne({email: req.query.email}).exec((err, user) => {
             if (err) console.log(err);
             else if (user === null) {
                 res.status(400).json({"error": "User not found!"});

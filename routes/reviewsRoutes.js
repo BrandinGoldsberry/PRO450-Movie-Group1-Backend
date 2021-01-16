@@ -23,7 +23,7 @@ ReviewRouter.get("/get-reviews-by-user", (req, res) => {
 //Get Review
 ReviewRouter.get("/get-review", (req, res) => {
     connectToMongo(() => {
-        Review.findOne({_id: req.body.id}).exec((err, review) => {
+        Review.findOne({_id: req.query.id}).exec((err, review) => {
             if(err) console.log(err);
             else {
                 res.statusCode = 200;
@@ -83,4 +83,17 @@ ReviewRouter.delete("/delete-review", jsonParser, (req, res) => {
     
 });
 
+ReviewRouter.get("/reviews-by-movie", (req, res) => {
+    var movieId = req.query.movieId;
+    connectToMongo(() => {
+        Review.find({movieId}).exec((err, reviews) => {
+            if (err) console.log(err);
+            else if (reviews === null || reviews === undefined) {
+                res.status(400).json({"error": "No reviews for movie"});
+            } else {
+                res.status(200).json({"reviews": reviews});
+            }
+        })
+    })
+})
 module.exports = ReviewRouter;
