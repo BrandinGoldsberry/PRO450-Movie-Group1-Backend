@@ -88,7 +88,7 @@ UserRouter.post("/sign-up", jsonParser, (req, res) => {
 
 UserRouter.put("/update-user", jsonParser, (req, res) => {
     var newUserInfo = {}
-
+    var email = req.body.email;
     if(req.body.password) {
         newUserInfo.pass = req.body.password;
     }
@@ -109,7 +109,7 @@ UserRouter.put("/update-user", jsonParser, (req, res) => {
     }
 
     connectToMongo(() => {
-        User.updateOne({email: newUser.email}, newUserInfo).exec((err, user) => {
+        User.updateOne({email}, newUserInfo).exec((err, user) => {
             if(user != null) {
                 res.status(400).json({"error": "User not found"});
             } else {
@@ -122,6 +122,19 @@ UserRouter.put("/update-user", jsonParser, (req, res) => {
                 //     }
                 // })
                 res.status(200).json({"Message": "User Updated!"});
+            }
+        })
+    })
+})
+
+UserRouter.delete("/delete-user", jsonParser, (req, res) => {
+    var email = req.body.email;
+    connectToMongo(() => {
+        User.deleteOne({email}).exec((err, users) => {
+            if(err) console.log(err);
+            else {
+                res.status(200).send({"users": users});
+                console.log(users);
             }
         })
     })
