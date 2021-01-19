@@ -86,4 +86,58 @@ UserRouter.post("/sign-up", jsonParser, (req, res) => {
     })
 });
 
+UserRouter.put("/update-user", jsonParser, (req, res) => {
+    var newUserInfo = {}
+    var email = req.body.email;
+    if(req.body.password) {
+        newUserInfo.pass = req.body.password;
+    }
+    if(req.body.street) {
+        newUserInfo.street = req.body.street;
+    }
+    if(req.body.city) {
+        newUserInfo.city = req.body.city;
+    }
+    if(req.body.state) {
+        newUserInfo.state = req.body.state;
+    }
+    if(req.body.zip_code) {
+        newUserInfo.zip_code = req.body.zip_code;
+    }
+    if(req.body.phone) {
+        newUserInfo.phone = req.body.phone;
+    }
+
+    connectToMongo(() => {
+        User.updateOne({email}, newUserInfo).exec((err, user) => {
+            if(user != null) {
+                res.status(400).json({"error": "User not found"});
+            } else {
+                // newUser.password = bcrypt.hash(newUser.pass, 10);
+                // userToAdd = new User(newUser);
+                // userToAdd.save((err) => {
+                //     if (err) console.log(err);
+                //     else {
+                //         res.status(200).json({"user": userToAdd});
+                //     }
+                // })
+                res.status(200).json({"Message": "User Updated!"});
+            }
+        })
+    })
+})
+
+UserRouter.delete("/delete-user", jsonParser, (req, res) => {
+    var email = req.body.email;
+    connectToMongo(() => {
+        User.deleteOne({email}).exec((err, users) => {
+            if(err) console.log(err);
+            else {
+                res.status(200).send({"users": users});
+                console.log(users);
+            }
+        })
+    })
+})
+
 module.exports = UserRouter;
