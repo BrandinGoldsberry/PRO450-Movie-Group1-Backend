@@ -8,7 +8,10 @@ const mongoose = require("mongoose");
 const { ObjectID } = require("bson");
 
 const connectToMongo = (callback) => {
-    mongoose.connect("mongodb+srv://main-app:0lB270dUkf2Yny4V@cluster0.kumhg.mongodb.net/Movies?retryWrites=true&w=majority", (err) => {
+    mongoose.connect("mongodb+srv://main-app:0lB270dUkf2Yny4V@cluster0.kumhg.mongodb.net/Movies?retryWrites=true&w=majority", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }, (err) => {
         if(err) console.log(err);
         else {
             callback();
@@ -104,7 +107,7 @@ ReviewRouter.get("/reviews-by-movie", (req, res) => {
         Review.find({movieId}).exec((err, reviews) => {
             if (err) console.log(err);
             else if (reviews === null || reviews === undefined || reviews.length < 1) {
-                res.status(400).json({"error": "No reviews for movie"});
+                res.status(200).json({"error": "No reviews for movie"});
             } else {
                 res.status(200).json({"reviews": reviews});
             }
