@@ -10,7 +10,8 @@ const User = mongoose.model('User', mongoose.Schema({
     email: String,
     phone: String,
     hashed_password: String,
-    username: String
+    username: String,
+    admin: Boolean
 }), "users");
 
 module.exports = User;

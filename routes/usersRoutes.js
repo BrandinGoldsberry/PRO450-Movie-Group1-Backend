@@ -86,6 +86,37 @@ UserRouter.post("/sign-up", jsonParser, (req, res) => {
     })
 });
 
+UserRouter.post("/create-admin", jsonParser, (req, res) => {
+    var newUser = {
+        pass: req.body.password,
+        fname: req.body.fname,
+        lname: req.body.lname,
+        street: req.body.street,
+        city: req.body.city,
+        state: req.body.state,
+        zip_code: req.body.zip_code,
+        email: req.body.email,
+        phone: req.body.phone,
+        admin: true
+    }
+    connectToMongo(() => {
+        User.findOne({email: newUser.email}).exec((err, user) => {
+            if(user != null) {
+                res.status(400).json({"error": "Email in Use!"});
+            } else {
+                newUser.password = bcrypt.hash(newUser.pass, 10);
+                userToAdd = new User(newUser);
+                userToAdd.save((err) => {
+                    if (err) console.log(err);
+                    else {
+                        res.status(200).json({"user": userToAdd});
+                    }
+                })
+            }
+        })
+    })
+});
+
 UserRouter.put("/update-user", jsonParser, (req, res) => {
     var newUserInfo = {}
     var email = req.body.email;
