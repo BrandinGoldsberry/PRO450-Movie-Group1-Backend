@@ -114,4 +114,18 @@ ReviewRouter.get("/reviews-by-movie", (req, res) => {
         })
     })
 })
+
+ReviewRouter.post("/remove-reviews-by-user", jsonParser, (req, res) => {
+    var userId = req.body.userId;
+    connectToMongo(() => {
+        Review.deleteMany({userId}).exec((err, result) => {
+            if (err) console.log(err);
+            else if(result !== null && result !== undefined && result.length !== 0) {
+                res.status(200).json({"result": result})
+            } else {
+                res.status(406).json({"error": "no results deleted"})
+            }
+        })
+    })
+})
 module.exports = ReviewRouter;
