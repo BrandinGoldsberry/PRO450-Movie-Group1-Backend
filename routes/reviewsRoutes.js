@@ -43,6 +43,7 @@ ReviewRouter.post("/post-review", jsonParser, (req, res) => {
     var reviewText = req.body.reviewText;
     var rating = req.body.rating;
     var movieId = req.body.movieId;
+    var username = req.body.username
     console.log(email);
     connectToMongo(() => {
         User.findOne({ email }).exec((err, user) => {
@@ -51,7 +52,8 @@ ReviewRouter.post("/post-review", jsonParser, (req, res) => {
                 movieId: movieId,
                 rating: rating,
                 review: reviewText,
-                userId: user._id
+                userId: user._id,
+                username
             });
             newReview.save((err) => {
                 if(err) console.log(err);
@@ -66,12 +68,13 @@ ReviewRouter.post("/post-review", jsonParser, (req, res) => {
 //Update Review
 ReviewRouter.put("/update-review", jsonParser, (req, res) => {
     var reviewId = req.body.reviewId;
-    var reviewText = req.body.reviewText;
+    var review = req.body.reviewText;
     var rating = req.body.rating;
     var newVals = {
-        bodyText: req.body.bodyText,
-        rating: req.body.rating
+        review,
+        rating
     }
+    console.log(req.body);
     connectToMongo(() => {
         Review.updateOne({_id: reviewId}, newVals).exec((err, review) => {
             if(err) console.log(err);

@@ -31,6 +31,20 @@ UserRouter.post("/get-user-by-email", (req, res) => {
     })
 })
 
+//Insecure? Yes? Does it matter? No
+UserRouter.post("/get-user-by-id", (req, res) => {
+    connectToMongo(() => {
+        User.findOne({_id: req.query.userId}).exec((err, user) => {
+            if (err) console.log(err);
+            else if (user === null) {
+                res.status(400).json({"error": "User not found!"});
+            } else {
+                res.status(200).json({"user": user});
+            }
+        });
+    })
+})
+
 UserRouter.post("/login", jsonParser, (req, res) => {
     var pass = req.body.password;
     var username = req.body.username;
