@@ -77,15 +77,14 @@ ReviewRouter.put("/update-review", jsonParser, (req, res) => {
     console.log(req.body);
     connectToMongo(() => {
         Review.updateOne({_id: reviewId}, newVals).exec((err, review) => {
-            if(err) console.log(err);
-            else {
-                res.status(200).send("Review submitted!");            }
+            if (err) console.log(err);
+            else res.status(200).send("Review submitted!");
         });
     });
 });
 
 //Delete Review
-ReviewRouter.delete("/delete-review", jsonParser, (req, res) => {
+ReviewRouter.delete("/delete-reviews", jsonParser, (req, res) => {
     
 });
 

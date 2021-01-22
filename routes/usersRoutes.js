@@ -1,3 +1,4 @@
+const Review = require("../schema/review");
 const User = require("../schema/user");
 const Express = require("express");
 const bodyParser = require("body-parser");
@@ -5,6 +6,7 @@ const UserRouter = Express.Router();
 const jsonParser = bodyParser.json();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const { json } = require("express");
 
 const connectToMongo = (callback) => {
     mongoose.connect("mongodb+srv://main-app:0lB270dUkf2Yny4V@cluster0.kumhg.mongodb.net/Movies?retryWrites=true&w=majority", {
@@ -173,17 +175,17 @@ UserRouter.put("/update-user", jsonParser, (req, res) => {
     })
 })
 
-UserRouter.delete("/delete-user", jsonParser, (req, res) => {
-    var email = req.body.email;
+UserRouter.delete('/delete-user', jsonParser, (req, res) => {
+    let id = req.body.id;
     connectToMongo(() => {
-        User.deleteOne({email}).exec((err, users) => {
-            if(err) console.log(err);
-            else {
-                res.status(200).send({"users": users});
-                console.log(users);
-            }
-        })
-    })
-})
+        User.findByIdAndDelete(id, (err, user) => {
+            if (err) console.log(err);
+            else Review.deleteMany({ "userId": id }, (err, deleted) => {
+                if (err) console.log(err);
+                else res.status(200).json({ user });
+            });
+        });
+    });
+});
 
 module.exports = UserRouter;
