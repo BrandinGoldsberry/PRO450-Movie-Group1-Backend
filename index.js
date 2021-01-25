@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const axios = require('axios');
+const bodyParser = require('body-parser')
 app.use(cors());
+app.use(bodyParser.urlencoded({extended:true}))
 
 //import routes that CRUD users
 const usersRoutes = require("./routes/usersRoutes.js");
