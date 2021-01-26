@@ -1,8 +1,8 @@
 const Review = require("../schema/review");
 const User = require("../schema/user");
 const Express = require("express");
-const bodyParser = require("body-parser");
 const ReviewRouter = Express.Router();
+const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 const mongoose = require("mongoose");
 const { ObjectID } = require("bson");
