@@ -62,7 +62,8 @@ UserRouter.post("/login", jsonParser, (req, res) => {
                         "user": {
                             "username": user.username,
                             "email": user.email,
-                            "id": user._id
+                            "id": user._id,
+                            "admin": user.admin
                         }
                     });
                 } else {
@@ -176,7 +177,7 @@ UserRouter.put("/update-user", jsonParser, (req, res) => {
 })
 
 UserRouter.delete('/delete-user', jsonParser, (req, res) => {
-    let id = req.body.id;
+    let id = req.query.userId;
     connectToMongo(() => {
         User.findByIdAndDelete(id, (err, user) => {
             if (err) console.log(err);

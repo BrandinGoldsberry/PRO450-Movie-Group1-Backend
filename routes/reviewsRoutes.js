@@ -84,8 +84,15 @@ ReviewRouter.put("/update-review", jsonParser, (req, res) => {
 });
 
 //Delete Review
-ReviewRouter.delete("/delete-reviews", jsonParser, (req, res) => {
-    
+ReviewRouter.delete("/delete-review", jsonParser, (req, res) => {
+    var reviewId = req.query.reviewId;
+    console.log(req.query);
+    connectToMongo(() => {
+        Review.deleteOne({_id: reviewId}).exec((err, review) => {
+            if (err) console.log(err);
+            else res.status(200).send("Review Deleted!");
+        });
+    });
 });
 
 ReviewRouter.get("/user-reviewed-movie", (req, res) => {
