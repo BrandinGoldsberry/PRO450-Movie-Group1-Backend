@@ -77,10 +77,13 @@ UserRouter.post("/isUserIdValid", (req, res) => {
 })
 
 UserRouter.post("/login", jsonParser, (req, res) => {
-    // console.log(req.body.username)
-
-    var pass = req.body.password;
     var username = req.body.username;
+    var pass = req.body.password;
+
+    if(!pass & !username){
+        return res.status(400).send("Not all fields are filled out.")
+    }
+
     connectToMongo(() => {
         User.findOne({ username: username }).exec((err, user) => {
             if (err) console.log(err);
@@ -89,7 +92,7 @@ UserRouter.post("/login", jsonParser, (req, res) => {
             }
             else {
                 if (bcrypt.compareSync(pass, user.hashed_password)) {
-                    res.status(200).json({
+                    return res.status(200).json({
                         "user": {
                             "username": user.username,
                             "email": user.email,
@@ -97,7 +100,7 @@ UserRouter.post("/login", jsonParser, (req, res) => {
                         }
                     });
                 } else {
-                    res.status(400).json({ "error": "Password invalid!" })
+                    return res.status(400).send("Password invalid!");
                 }
             }
         });
