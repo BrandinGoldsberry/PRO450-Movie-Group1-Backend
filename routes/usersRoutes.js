@@ -69,7 +69,8 @@ UserRouter.post("/isUserIdValid", (req, res) => {
                             "username": user.username,
                             "email": user.email,
                             "id": user._id,
-                            "admin": user.admin
+                            "admin": user.admin,
+                            "superAdmin": user.superAdmin
                         }
                     });
                 }
@@ -100,7 +101,8 @@ UserRouter.post("/login", jsonParser, (req, res) => {
                             "username": user.username,
                             "email": user.email,
                             "id": user._id,
-                            "admin": user.admin
+                            "admin": user.admin,
+                            "superAdmin": user.superAdmin
                         }
                     });
                 } else {
@@ -259,7 +261,7 @@ UserRouter.put("/update-user", jsonParser, (req, res) => {
 UserRouter.delete('/delete-user', jsonParser, (req, res) => {
     let id = req.query.userId;
     connectToMongo(() => {
-        User.deleteOne({ email }).exec((err, users) => {
+        User.deleteOne({ _id: id }).exec((err, users) => {
             if (err) console.log(err);
             else {
                 // console.log(users);
