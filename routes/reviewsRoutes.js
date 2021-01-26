@@ -77,16 +77,22 @@ ReviewRouter.put("/update-review", jsonParser, (req, res) => {
     console.log(req.body);
     connectToMongo(() => {
         Review.updateOne({_id: reviewId}, newVals).exec((err, review) => {
-            if(err) console.log(err);
-            else {
-                res.status(200).send("Review submitted!");            }
+            if (err) console.log(err);
+            else res.status(200).send("Review submitted!");
         });
     });
 });
 
 //Delete Review
 ReviewRouter.delete("/delete-review", jsonParser, (req, res) => {
-    
+    var reviewId = req.query.reviewId;
+    console.log(req.query);
+    connectToMongo(() => {
+        Review.deleteOne({_id: reviewId}).exec((err, review) => {
+            if (err) console.log(err);
+            else res.status(200).send("Review Deleted!");
+        });
+    });
 });
 
 ReviewRouter.get("/user-reviewed-movie", (req, res) => {

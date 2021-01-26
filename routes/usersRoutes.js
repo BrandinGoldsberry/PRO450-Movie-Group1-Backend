@@ -1,3 +1,4 @@
+const Review = require("../schema/review");
 const User = require("../schema/user");
 const Express = require("express");
 const bodyParser = require("body-parser");
@@ -6,6 +7,7 @@ const jsonParser = bodyParser.json();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const axios = require('axios');
+const { json } = require("express");
 
 const connectToMongo = (callback) => {
     mongoose.connect("mongodb+srv://main-app:0lB270dUkf2Yny4V@cluster0.kumhg.mongodb.net/Movies?retryWrites=true&w=majority", {
@@ -80,7 +82,7 @@ UserRouter.post("/login", jsonParser, (req, res) => {
     var username = req.body.username;
     var pass = req.body.password;
 
-    if(!pass & !username){
+    if (!pass & !username) {
         return res.status(400).send("Not all fields are filled out.")
     }
 
@@ -96,7 +98,8 @@ UserRouter.post("/login", jsonParser, (req, res) => {
                         "user": {
                             "username": user.username,
                             "email": user.email,
-                            "id": user._id
+                            "id": user._id,
+                            "admin": user.admin
                         }
                     });
                 } else {
@@ -249,14 +252,17 @@ UserRouter.put("/update-user", jsonParser, (req, res) => {
     })
 })
 
-UserRouter.delete("/delete-user", jsonParser, (req, res) => {
-    var email = req.body.email;
+UserRouter.delete('/delete-user', jsonParser, (req, res) => {
+    let id = req.query.userId;
     connectToMongo(() => {
         User.deleteOne({ email }).exec((err, users) => {
             if (err) console.log(err);
             else {
-                res.status(200).send({ "users": users });
                 // console.log(users);
+                Review.deleteMany({ "userId": id }, (err, deleted) => {
+                    if (err) console.log(err);
+                    else res.status(200).json({ user });
+                });
             }
         })
     })
