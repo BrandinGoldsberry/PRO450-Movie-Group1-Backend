@@ -68,7 +68,8 @@ UserRouter.post("/isUserIdValid", (req, res) => {
                         "user": {
                             "username": user.username,
                             "email": user.email,
-                            "id": user._id
+                            "id": user._id,
+                            "admin": user.admin
                         }
                     });
                 }
