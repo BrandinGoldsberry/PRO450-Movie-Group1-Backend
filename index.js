@@ -12,6 +12,8 @@ const usersRoutes = require("./routes/usersRoutes.js");
 const reviewsRoutes = require("./routes/reviewsRoutes.js");
 //imports routes that serve the front of the website
 const frontendRoutes = require("./routes/frontendRoutes.js");
+//imports routes that are used to send emails to users
+const emailRoutes = require("./routes/emailRoutes");
 
 if(process.env.NODE_ENV !== "production") {
     require('dotenv').config();
@@ -20,6 +22,7 @@ if(process.env.NODE_ENV !== "production") {
 // app.use("/", frontendRoutes);
 app.use("/users", usersRoutes);
 app.use("/reviews", reviewsRoutes);
+app.use("/email", emailRoutes);
 app.use("/static/js", express.static('static/js'));
 app.use("/static/css", express.static('static/css'));
 

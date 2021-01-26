@@ -212,32 +212,35 @@ UserRouter.post("/create-admin", jsonParser, (req, res) => {
     })
 });
 
+// UserRouter.put('/update-user', jsonParser, (req, res) => {
+//     let id = req.body.userId;
+//     connectToMongo(() => {
+
+//     });
+// });
+
 UserRouter.put("/update-user", jsonParser, (req, res) => {
     var newUserInfo = {}
-    var email = req.body.email;
-    if (req.body.password) {
-        newUserInfo.pass = req.body.password;
-    }
-    if (req.body.street) {
-        newUserInfo.street = req.body.street;
-    }
-    if (req.body.city) {
-        newUserInfo.city = req.body.city;
-    }
-    if (req.body.state) {
-        newUserInfo.state = req.body.state;
-    }
-    if (req.body.zip_code) {
-        newUserInfo.zip_code = req.body.zip_code;
-    }
-    if (req.body.phone) {
-        newUserInfo.phone = req.body.phone;
-    }
+    var id = req.body.userId;
+    // id = mongoose.Types.ObjectId(id);
+    if(req.body.username) newUserInfo.username = req.body.username;
+    if(req.body.password) newUserInfo.hashed_password = bcrypt.hashSync(req.body.password, 10);
+    if(req.body.email) newUserInfo.email = req.body.email;
+    if(req.body.fname) newUserInfo.fname = req.body.fname;
+    if(req.body.lname) newUserInfo.lname = req.body.lname;
+    if(req.body.street) newUserInfo.street = req.body.street;
+    if(req.body.city) newUserInfo.city = req.body.city;
+    if(req.body.state) newUserInfo.state = req.body.state;
+    if(req.body.zip_code) newUserInfo.zip_code = req.body.zip_code;
+    if(req.body.phone) newUserInfo.phone = req.body.phone;
+
+    console.log(newUserInfo);
 
     connectToMongo(() => {
-        User.updateOne({ email }, newUserInfo).exec((err, user) => {
-            if (user != null) {
-                res.status(400).json({ "error": "User not found" });
+        User.updateOne({_id: id}, newUserInfo).exec((err, user) => {
+            console.log(user);
+            if(user != null) {
+                res.status(200).json({"error": "User not found"});
             } else {
                 // newUser.password = bcrypt.hash(newUser.pass, 10);
                 // userToAdd = new User(newUser);
@@ -247,7 +250,7 @@ UserRouter.put("/update-user", jsonParser, (req, res) => {
                 //         res.status(200).json({"user": userToAdd});
                 //     }
                 // })
-                res.status(200).json({ "Message": "User Updated!" });
+                res.status(200).json({"message": "User Updated!"});
             }
         })
     })
