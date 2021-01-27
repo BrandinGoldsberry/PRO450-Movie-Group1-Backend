@@ -21,10 +21,12 @@ const sendEmail = (from, to, subject, text, callback) => {
 };
 
 EmailRouter.post('/reset-password', jsonParser, (req, res) => {
+    const userId = req.body.userId;
     if (req.body.email) {
         const subject = 'Reset Password';
         const text = `Dear [user]\n\n` +
-        'Click here to reset your password :)';
+        'Click here to reset your password :)\n' +
+        `localhost:3000/reset-password/${userId}`;
         sendEmail(masterEmail, req.body.email, subject, text, (err, info) => {
             if (err) console.log(err);
             else res.send(info.response);
