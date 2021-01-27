@@ -274,19 +274,6 @@ UserRouter.delete('/delete-user', jsonParser, (req, res) => {
     })
 })
 
-UserRouter.put('/update-password', jsonParser, (req, res) => {
-    const userId = req.body.userId;
-    const password = req.body.password;
-    connectToMongo(() => {
-        User.updateOne({ _id: userId }, {
-            password: bcrypt.hashSync(password, 10)
-        }, (err, doc) => {
-            if (err) console.log(err);
-            else res.status(200).json(doc);
-        });
-    });
-});
-
 UserRouter.get('/find-users-by-username', (req, res) => {
     let searchQuery = new RegExp("^" + req.query.search, 'i');
     console.log(searchQuery);
@@ -331,5 +318,18 @@ UserRouter.get('/take-admin', (req, res) => {
         })
     })
 })
+
+UserRouter.put('/update-password', jsonParser, (req, res) => {
+    const userId = req.body.userId;
+    const password = req.body.password;
+    connectToMongo(() => {
+        User.updateOne({ _id: userId }, {
+            password: bcrypt.hashSync(password, 10)
+        }, (err, doc) => {
+            if (err) console.log(err);
+            else res.status(200).json(doc);
+        });
+    });
+});
 
 module.exports = UserRouter;

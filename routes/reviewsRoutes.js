@@ -19,10 +19,6 @@ const connectToMongo = (callback) => {
     });
 }
 
-ReviewRouter.get("/get-reviews-by-user", (req, res) => {
-
-});
-
 //Get Review
 ReviewRouter.get("/get-review", (req, res) => {
     connectToMongo(() => {
@@ -102,7 +98,7 @@ ReviewRouter.get("/user-reviewed-movie", (req, res) => {
         Review.find({movieId, userId}).exec((err, reviews) => {
             if (err) console.log(err);
             else if (reviews === null || reviews === undefined || reviews.length < 1) {
-                res.status(200).json({"reviews": "No reviews for movie by user"});
+                res.status(200).json({"reviews": []});
             } else {
                 res.status(200).json({"reviews": reviews});
             }
@@ -124,6 +120,17 @@ ReviewRouter.get("/reviews-by-movie", (req, res) => {
     })
 })
 
+
+ReviewRouter.get("/get-reviews-by-user", (req, res) => {
+    var userId = req.query.userId;
+    connectToMongo(() => {
+        Review.find({userId}).exec((err, result) => {
+            if (err) console.log(err);
+            else if(result !== null && result !== undefined && result.length !== 0) {
+                res.status(200).json({"result": result})
+            } else {
+                res.status(406).json({"result": []})
+
 ReviewRouter.get("/reviews-by-movie", (req, res) => {
     var movieId = req.query.movieId;
     connectToMongo(() => {
@@ -133,6 +140,7 @@ ReviewRouter.get("/reviews-by-movie", (req, res) => {
                 res.status(200).json({"error": "No reviews for movie"});
             } else {
                 res.status(200).json({"reviews": reviews});
+
             }
         })
     })
@@ -151,4 +159,6 @@ ReviewRouter.post("/remove-reviews-by-user", jsonParser, (req, res) => {
         })
     })
 })
+
 module.exports = ReviewRouter;
+
