@@ -130,6 +130,10 @@ ReviewRouter.get("/get-reviews-by-user", (req, res) => {
                 res.status(200).json({"result": result})
             } else {
                 res.status(406).json({"result": []})
+            }
+        })
+    })
+})
 
 ReviewRouter.get("/reviews-by-movie", (req, res) => {
     var movieId = req.query.movieId;
