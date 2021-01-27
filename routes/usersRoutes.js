@@ -287,4 +287,49 @@ UserRouter.put('/update-password', jsonParser, (req, res) => {
     });
 });
 
+UserRouter.get('/find-users-by-username', (req, res) => {
+    let searchQuery = new RegExp("^" + req.query.search, 'i');
+    console.log(searchQuery);
+    connectToMongo(() => {
+        //You can use strings to explicitly exclude data
+        User.find({username: searchQuery}, "-_hashed_password").exec((err, users) => {
+            if (err) console.log(err);
+            else {
+                //I'm just sending it all
+                res.status(200).json({"users": users})
+            }
+        })
+    })
+})
+
+UserRouter.get('/make-admin', (req, res) => {
+    let userId = req.query.userId;
+    connectToMongo(() => {
+        User.findOneAndUpdate(
+            {_id: userId},
+            {admin: true}
+        ).exec((err, user) => {
+            if (err) console.log(err);
+            else {
+                res.status(200).json({"user": user})
+            }
+        })
+    })
+})
+
+UserRouter.get('/take-admin', (req, res) => {
+    let userId = req.query.userId;
+    connectToMongo(() => {
+        User.findOneAndUpdate(
+            {_id: userId},
+            {admin: false}
+        ).exec((err, user) => {
+            if (err) console.log(err);
+            else {
+                res.status(200).json({"user": user})
+            }
+        })
+    })
+})
+
 module.exports = UserRouter;
