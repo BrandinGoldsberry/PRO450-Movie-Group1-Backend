@@ -5,7 +5,6 @@ const ReviewRouter = Express.Router();
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 const mongoose = require("mongoose");
-const { ObjectID } = require("bson");
 
 const connectToMongo = (callback) => {
     mongoose.connect("mongodb+srv://main-app:0lB270dUkf2Yny4V@cluster0.kumhg.mongodb.net/Movies?retryWrites=true&w=majority", {

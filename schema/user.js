@@ -46,6 +46,10 @@ const User = mongoose.model('User', mongoose.Schema({
         type: String,
         require: false
     },
+    login_attempts: {
+        type: Number,
+        require: true
+    },
     admin: Boolean,
     superAdmin: Boolean
 }), "users");

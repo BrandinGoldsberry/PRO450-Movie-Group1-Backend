@@ -84,7 +84,7 @@ UserRouter.post("/login", jsonParser, (req, res) => {
     var username = req.body.username;
     var pass = req.body.password;
 
-    if (!pass & !username) {
+    if (!pass || !username) {
         return res.status(400).send("Not all fields are filled out.")
     }
 
@@ -95,7 +95,13 @@ UserRouter.post("/login", jsonParser, (req, res) => {
                 res.status(400).json({ "error": "User not found" });
             }
             else {
-                if (bcrypt.compareSync(pass, user.hashed_password)) {
+                if (user.login_attempts >= 10) {
+                    console.log(`too many login attempts by ${user.username}`);
+                    return res.status(200).json({ message: "Account locked. Please reset your password to unlock your account.", success: false });
+                } else if (bcrypt.compareSync(pass, user.hashed_password)) {
+                    console.log(`successful login attempt by ${user.username}`);
+                    user.login_attempts = 0;
+                    user.save();
                     return res.status(200).json({
                         "user": {
                             "username": user.username,
@@ -103,10 +109,14 @@ UserRouter.post("/login", jsonParser, (req, res) => {
                             "id": user._id,
                             "admin": user.admin,
                             "superAdmin": user.superAdmin
-                        }
+                        },
+                        success: true
                     });
                 } else {
-                    return res.status(400).send("Password invalid!");
+                    console.log(`failed login attempt by ${user.username}`);
+                    user.login_attempts++;
+                    user.save();
+                    return res.status(200).json({ message: "Password invalid!", success: false });
                 }
             }
         });
@@ -324,24 +334,19 @@ UserRouter.put('/update-password', jsonParser, (req, res) => {
     const password = req.body.password;
     connectToMongo(() => {
         User.findOne({ reset_pass_token: token }, (err, user) => {
-            console.log(user);
-            if (err) console.log(err);
-            else {
-                user.hashed_password = bcrypt.hashSync(password, 10);
-                user.reset_pass_token = null;
-                user.save(() => {
-                    res.json({ success: true });
-                });
-            }
+            if (user) {
+                console.log(user);
+                if (err) console.log(err);
+                else {
+                    user.hashed_password = bcrypt.hashSync(password, 10);
+                    user.reset_pass_token = null;
+                    user.login_attempts = 0;
+                    user.save(() => {
+                        res.json({ success: true });
+                    });
+                }
+            } else res.json({ success: false });
         });
-        // User.updateOne({ reset_pass_token: token }, {
-        //     hashed_password: bcrypt.hashSync(password, 10),
-        //     reset_pass_token: null
-        // }, (err, docs) => {
-        //     console.log(docs);
-        //     if (err) console.log(err);
-        //     else res.json({ success: !!docs.nModified });
-        // });
     });
 });
 
