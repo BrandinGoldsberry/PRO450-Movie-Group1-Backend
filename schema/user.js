@@ -42,6 +42,10 @@ const User = mongoose.model('User', mongoose.Schema({
         type: String,
         require: true
     },
+    reset_pass_token: {
+        type: String,
+        require: false
+    },
     admin: Boolean,
     superAdmin: Boolean
 }), "users");

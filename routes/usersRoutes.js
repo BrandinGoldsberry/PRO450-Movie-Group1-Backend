@@ -320,15 +320,28 @@ UserRouter.get('/take-admin', (req, res) => {
 })
 
 UserRouter.put('/update-password', jsonParser, (req, res) => {
-    const userId = req.body.userId;
+    const token = req.body.token;
     const password = req.body.password;
     connectToMongo(() => {
-        User.updateOne({ _id: userId }, {
-            password: bcrypt.hashSync(password, 10)
-        }, (err, doc) => {
+        User.findOne({ reset_pass_token: token }, (err, user) => {
+            console.log(user);
             if (err) console.log(err);
-            else res.status(200).json(doc);
+            else {
+                user.hashed_password = bcrypt.hashSync(password, 10);
+                user.reset_pass_token = null;
+                user.save(() => {
+                    res.json({ success: true });
+                });
+            }
         });
+        // User.updateOne({ reset_pass_token: token }, {
+        //     hashed_password: bcrypt.hashSync(password, 10),
+        //     reset_pass_token: null
+        // }, (err, docs) => {
+        //     console.log(docs);
+        //     if (err) console.log(err);
+        //     else res.json({ success: !!docs.nModified });
+        // });
     });
 });
 
