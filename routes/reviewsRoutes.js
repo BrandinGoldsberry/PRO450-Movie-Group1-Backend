@@ -34,16 +34,16 @@ ReviewRouter.get("/get-review", (req, res) => {
 
 //Add Review
 ReviewRouter.post("/post-review", jsonParser, (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     var email = req.body.email;
     var reviewText = req.body.reviewText;
     var rating = req.body.rating;
     var movieId = req.body.movieId;
     var username = req.body.username
-    console.log(email);
+    // console.log(email);
     connectToMongo(() => {
         User.findOne({ email }).exec((err, user) => {
-            console.log(user);
+            // console.log(user);
             let newReview = new Review({
                 movieId: movieId,
                 rating: rating,
@@ -70,7 +70,7 @@ ReviewRouter.put("/update-review", jsonParser, (req, res) => {
         review,
         rating
     }
-    console.log(req.body);
+    // console.log(req.body);
     connectToMongo(() => {
         Review.updateOne({_id: reviewId}, newVals).exec((err, review) => {
             if (err) console.log(err);
@@ -82,7 +82,7 @@ ReviewRouter.put("/update-review", jsonParser, (req, res) => {
 //Delete Review
 ReviewRouter.delete("/delete-review", jsonParser, (req, res) => {
     var reviewId = req.query.reviewId;
-    console.log(req.query);
+    // console.log(req.query);
     connectToMongo(() => {
         Review.deleteOne({_id: reviewId}).exec((err, review) => {
             if (err) console.log(err);
@@ -126,10 +126,10 @@ ReviewRouter.get("/get-reviews-by-user", (req, res) => {
     connectToMongo(() => {
         Review.find({userId}).exec((err, result) => {
             if (err) console.log(err);
-            else if(result !== null && result !== undefined && result.length !== 0) {
+            if(result !== null && result !== undefined && result.length !== 0) {
                 res.status(200).json({"result": result})
-            } else {
-                res.status(406).json({"result": []})
+            }else{
+                {result}
             }
         })
     })
