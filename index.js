@@ -2,9 +2,13 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const axios = require('axios');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const pug = require('pug');
+
+app.set('view engine', 'pug');
 app.use(cors());
-app.use(bodyParser.urlencoded({extended:true}))
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(express.static('public'));
 
 //import routes that CRUD users
 const usersRoutes = require("./routes/usersRoutes.js");
@@ -23,6 +27,7 @@ if(process.env.NODE_ENV !== "production") {
 app.use("/users", usersRoutes);
 app.use("/reviews", reviewsRoutes);
 app.use("/email", emailRoutes);
+app.use("/", frontendRoutes);
 app.use("/static/js", express.static('static/js'));
 app.use("/static/css", express.static('static/css'));
 

@@ -1,0 +1,314 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+button,
+input[type="submit"] {
+    border: none;
+    background: none;
+    color: none;
+    cursor: pointer;
+}
+
+h3 {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bolder;
+}
+
+button {
+    cursor: pointer;
+    display: inline-block;
+    margin: 5px !important;
+    text-decoration: none;
+    background-color: rgb(91, 184, 212) !important;
+    border: rgb(91, 184, 212) solid 3px !important;
+    color: white;
+    box-shadow: 0px 0px 0 rgb(91, 184, 192),
+                0px 1px 0 rgb(71,164,172),
+                0px 2px 0 rgb(51,144,152),
+                0px 3px 0 rgb(31,124,132),
+                0px 4px 0 rgb(11,104,112),
+                0px 5px 0 rgb(0,84,92),
+                0px 6px 0 rgb(0,64,72),
+                0px 7px 0 rgb(0,44,52),
+                0px 8px 7px rgba(0,0,0,0.6),
+                0px 8px 1px rgba(0,0,0,0.5),
+                0px 0px 7px rgba(0,0,0,.2);
+    transition: box-shadow 0.2s, transform 0.2s;
+    padding: 0;
+}
+
+button:hover {
+    box-shadow: 0px 0px 0 rgb(161,-50,-11),
+    0px 1px 0 rgb(71,164,172),
+    0px 2px 0 rgb(11,104,112),
+    0px 3px 0 rgb(0,44,52),
+    0px 4px 3px rgba(0,0,0,0.6),
+    0px 4px 1px rgba(0,0,0,0.5),
+    0px 0px 3px rgba(0,0,0,.2);
+    transform: translateY(4px);
+}
+
+/* Header */
+#header {
+    display: flex;
+    background-color: rgb(240, 240, 240);
+    align-items: center;
+    justify-content: space-between;
+    height: 4.8vh;
+    border-bottom: rgb(221, 221, 221) solid 1.5px;
+    margin-bottom: 10px;
+}
+
+#navButtons {
+    display: flex;
+    align-items: center;
+    justify-items: flex-end;
+    justify-content: flex-end;
+    height: 100%;
+    align-content: space-around;
+}
+
+#navButtons button {
+    height: 70%;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0;
+}
+
+#navButtons button:hover {
+    background-color: rgb(224, 224, 224);
+}
+
+#navBarTitle {
+    text-decoration: none;
+    color: unset;
+    margin-left: 5px;
+}
+
+#movieContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.title-wrap {
+    display: flex;
+    align-items: flex-end;
+    min-height: 80px;
+}
+
+.movie-title {
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.movie-card {
+    display: block;
+    width: 20%;
+    margin: 5px;
+}
+
+.movie-card  p{
+    display: block;
+}
+
+.movie-description {
+    height: 50px;
+    display: block;
+}
+
+.movie-poster {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-bottom: 7.5%;
+    transition: all 0.1s;
+}
+
+.movie-poster:hover {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.overall-rating {
+    display: inline-flex; 
+    flex-direction: row;
+}
+
+.reviews-mask {
+    overflow: hidden;
+}
+
+.reviews-list {
+    transition: transform 0.5s;
+}
+
+.user-review {
+    background-color: #EEE;
+    border: 15px solid #EEE;
+    margin: 15px 0px;
+}
+
+.user-review p {
+    margin: 0;
+}
+
+a#navBarTitle h1 {
+    white-space: nowrap;
+}
+div#navButtons {
+    width: 100%;
+}
+
+span.nav-splitter {
+    width: 100%;
+}
+
+/* Movie Detail Page */
+em{
+    font-style: italic;
+    font-size: 23pt;
+    transform:scale(4,1);
+    color: rgb(90, 90, 90);
+}
+
+th, td {
+    border: 2px solid black;
+    padding: 2px;
+}
+th {
+    background-color: lightgray;
+}
+tr {
+    cursor: pointer;
+}
+tr:nth-child(even) {
+    background-color: rgb(91, 184, 212);
+}
+tr:hover {
+    background-color: rgb(131, 224, 252);
+}
+
+#dashboard {
+    display: flex;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #EEE;
+    min-height: 700px;
+}
+
+#search-panel .table-wrapper {
+    max-height: 800px;
+    overflow-y: scroll;
+}
+
+#moviePageContainer{
+    display: flex;
+    align-self: center;
+    margin: auto;
+    padding: 25px;
+    flex-direction: row;
+    width: 60% !important;
+    /* background-color: rgba(128, 128, 128, 0.157); */
+}
+
+#moviePoster{
+    width: fit-content;
+    margin: 1rem;
+}
+
+#movieInformationWrapper{
+    display: flex;
+    width: 50% !important;
+    flex-direction: column;
+    width: fit-content;
+    margin: 1rem;
+}
+
+#movieUnderTitleInfo{
+    width: fit-content;
+}
+
+#movieName{
+    width: fit-content;
+}
+
+#movieName h2{
+    font-weight: bold;
+}
+
+#movieTagLine{
+    width: fit-content;
+}
+
+#movieOverview{
+    width: 80%;
+}
+
+@media screen and (max-width: 950px) {
+    #moviePageContainer{
+        flex-direction: column;
+    }
+    
+    #movieOverview{
+        width: fit-content;
+    }
+  }
+
+.errorMessage {
+    color: red;
+}

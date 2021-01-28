@@ -26,6 +26,7 @@
     "express": "^4.17.1",
     "mongoose": "^5.11.11",
     "nodemailer": "^6.4.17",
+    "pug": "^3.0.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
