@@ -9,6 +9,7 @@ app.set('view engine', 'pug');
 app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static('public'));
+app.use(express.static('public/fonts'));
 
 //import routes that CRUD users
 const usersRoutes = require("./routes/usersRoutes.js");

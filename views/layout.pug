@@ -2,15 +2,31 @@ html
     head
         title Movies n reviews
         link(rel="stylesheet", href="/css/style.css")
+        link(rel="stylesheet" href="/css/all.min.css")
     body
-        header
-            a(href="/")
+        header#header
+            a#navBarTitle(href="/")
                 h1 Movies n reviews
-            div(id="navButtons")
-                button
+            div#navButtons
+                input#movieTitleInput(placeholder="Search Movie " + searchType name="search")
+                button#movieSubmit Search
+
+                select#searchTypeSelect(name="searchType")
+                    option(default value="Title") Title
+                    option(value="Actor") Actor
+                    option(value="Genre") Genre
+
+                if user && user.admin
+                    button
+                        p Admin Dashboard
+                if user
+                    button
+                        p #{user.username}
+
+                button#loginButton
                     p Login
-                button
+                button#signUpButton
                     p Sign Up
         block content
         footer
-            block scripts
+            script( type="module" src="/js/main.js")
