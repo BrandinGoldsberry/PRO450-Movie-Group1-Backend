@@ -2,7 +2,7 @@ const initializeStars = () => {
     let stars = document.getElementsByClassName("stars");
     for (const starSet of stars) {
         //Get Rating of the star set
-        let curRating = starSet.dataset["rating-val"];
+        let curRating = starSet.dataset.ratingval;
 
         let fullStars = Math.floor(curRating);
         let halfStars = curRating % 1 != 0 ? 1 : 0;
