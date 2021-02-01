@@ -350,4 +350,15 @@ UserRouter.put('/update-password', jsonParser, (req, res) => {
     });
 });
 
+UserRouter.get('/validate-reset-token', (req, res) => {
+    const token = req.query.token || '';
+    console.log(token);
+    connectToMongo(() => {
+        User.findOne({ reset_pass_token: token }, (err, user) => {
+            if (err) console.log(err);
+            else res.send(!!user);
+        });
+    });
+});
+
 module.exports = UserRouter;

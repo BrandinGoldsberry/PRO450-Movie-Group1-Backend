@@ -45,7 +45,7 @@ EmailRouter.post('/reset-password', jsonParser, (req, res) => {
         if (query) {
             User.findOne(query, (err, user) => {
                 if (err) console.log(err);
-                else {
+                else if (user) {
                     let token = uuid.v4();
                     user.reset_pass_token = token;
                     user.save();
@@ -57,9 +57,9 @@ EmailRouter.post('/reset-password', jsonParser, (req, res) => {
                     `http://localhost:3000/reset-password/${user.reset_pass_token}`;
                     sendEmail(masterEmail, user.email, subject, text, (err, info) => {
                         if (err) console.log(err);
-                        else res.send(info.response);
+                        else res.send(true);
                     });
-                }
+                } else res.send(false);
             });
         }
     });
