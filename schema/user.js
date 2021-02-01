@@ -27,8 +27,7 @@ const User = mongoose.model('User', mongoose.Schema({
     },
     email: {
         type: String,
-        require: true,
-        unique: true
+        require: true
     },
     phone: {
         type: String,

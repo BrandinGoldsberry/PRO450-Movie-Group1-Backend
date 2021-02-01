@@ -10,7 +10,7 @@ block content
                     p #{movie.release_date}
                     img.movie-poster(src="https://image.tmdb.org/t/p/w500" + movie.poster_path, alt="Movie Poster")
                     //Remember to preprocess the overview because it too big
-                    p.movie-description #{movie.overview}
+                    p.movie-description #{movie.overview}...
                     .overall-rating
                         .rating-stack
                             //Stars go here, this will be a nightmare
@@ -21,24 +21,24 @@ block content
                                         data-half="fa fa-star-half-alt" 
                                         data-empty="far fa-star"
                                     )
-                            p.rating-amount(style="lineHeight: 32px") 0 ratings
-                        button#showReviewButton Show Reviews
+                            p.rating-amount 0 ratings
+                        button.showReviewButton(data-movieid=movie.id) Show Reviews
                     .reviews-mask
-                        .reviews-list
-                                //list reviews here
-                        //if user
-                        div
-                            //star editor goes here
-                            //set data-, loop through class, set elements by data
-                            .stars-editable(data-movieid=movie.id data-ratingval="0")
-                                for i in [0, 1, 2, 3, 4]
-                                    span.ratingStar(
-                                        data-full="fa fa-star" 
-                                        data-half="fa fa-star-half-alt" 
-                                        data-empty="far fa-star"
-                                    )
+                        .reviews-list(id="review-list-" + movie.id)
+                            //list reviews here
+                        if user   
+                            div
+                                //star editor goes here
+                                //set data-, loop through class, set elements by data
+                                .stars-editable(data-movieid=movie.id data-ratingval="0")
+                                    for i in [0, 1, 2, 3, 4]
+                                        span.ratingStar(
+                                            data-full="fa fa-star" 
+                                            data-half="fa fa-star-half-alt" 
+                                            data-empty="far fa-star"
+                                        )
 
-                            //Loop through text inputs and set upload var to the one that changes
-                            //Carry data-movie-id with function in order to verify input matches movie
-                            input.newReviewTextInput(type="text" data-movieid=movie.id)
-                            button.postNewReview(data-movieid=movie.id) Post Review
+                                //Loop through text inputs and set upload var to the one that changes
+                                //Carry data-movie-id with function in order to verify input matches movie
+                                input.newReviewTextInput(type="text" data-movieid=movie.id)
+                                button.postNewReview(data-movieid=movie.id) Post Review

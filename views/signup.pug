@@ -1,0 +1,88 @@
+extends layout.pug
+
+block content
+    form.formWrapper#signupForm
+        script(src="https://www.google.com/recaptcha/api.js" async defer)
+        h2 Sign Up
+        span.errorMessage#signupError
+
+        label(for="registerFName") First Name
+        input#registerFName.inputBox(
+            required
+            type="text"
+            name="registerFName")
+        br
+
+        label(for="registerLName") Last Name
+        input#registerLName.inputBox(
+            type="text"
+            required
+            name="registerLName")
+
+        br
+
+        label(for="registerEmail") Email
+        input#registerEmail.inputBox(
+            required
+            type="email"
+            name="registerEmail"
+            className="inputBox")
+
+        br
+
+        label(for="registerState") State
+        input#registerState.inputBox(
+            required
+            type="text"
+            name="registerState")
+
+        br
+
+        label(for="registerStreet") Street
+        input#registerSteet.inputBox(
+            required
+            type="text"
+            name="registerStreet")
+
+        br
+
+        label(for="registerCity") City
+        input#registerCity.inputBox(
+            required
+            type="text"
+            name="registerCity")
+
+        br
+
+        label(for="registerZipCode") Zip Code
+        input#registerZipCode.inputBox(
+            required
+            type="text"
+            name="registerZipCode")
+
+        br
+
+        label(for="registerPhone") Phone Number
+        input#registerPhone.inputBox(
+            type="text"
+            name="registerPhone")
+
+        br
+
+        label(for="registerPassword") Password
+        input#registerPassword.inputBox(
+            required
+            type="password"
+            name="registerPassword")
+
+        div#recaptcha.g-recaptcha(data-sitekey="6LfU2zoaAAAAAE8uHnF4kc5vYMqIcNodmLXJymiK"
+        data-callback="onSignupCaptchaCompleted"
+        data-size="invisible")
+        br
+
+        p Already have an account? 
+        br
+        a(href="/login")
+
+        br
+        input.inputButton(type="submit" value="Sign Up")

@@ -3,13 +3,20 @@ html
         title Movies n reviews
         link(rel="stylesheet", href="/css/style.css")
         link(rel="stylesheet" href="/css/all.min.css")
+        script(src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js")
+        script(src="https://unpkg.com/axios/dist/axios.min.js")
     body
         header#header
             a#navBarTitle(href="/")
                 h1 Movies n reviews
             div#navButtons
-                input#movieTitleInput(placeholder="Search Movie " + searchType name="search")
+                select#genreSelect.disabled(name="genres")
+                    if genreList
+                        each genre in genreList
+                            option(value=`${genre.id}`) #{genre.name}
+                input#movieTitleInput(placeholder="Search Movie by Title" name="search")
                 button#movieSubmit Search
+                
 
                 select#searchTypeSelect(name="searchType")
                     option(default value="Title") Title
@@ -23,11 +30,12 @@ html
                     button
                         p #{user.username}
 
-                button#loginButton
-                    p Login
-                button#signUpButton
-                    p Sign Up
+                button#adminButton.disabled DashBoard
+                button#userPageButton.disabled
+                button#logOutButton.disabled Log Out
+
+                button#loginButton Login
+                button#signUpButton Sign Up
         block content
         footer
-            script(src="https://unpkg.com/axios/dist/axios.min.js")
             script( type="module" src="/js/main.js")
