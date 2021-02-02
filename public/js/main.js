@@ -35,7 +35,9 @@ const enableAccountButtons = () => {
     let userPageButton = document.getElementById("userPageButton");
     let logOutButton = document.getElementById("logOutButton");
 
-    adminButton.className = "";
+    if(Cookies.get("admin") == true) {
+        adminButton.className = "";
+    }
     userPageButton.className = "";
     userPageButton.innerText = Cookies.get("username");
     logOutButton.className = "";
