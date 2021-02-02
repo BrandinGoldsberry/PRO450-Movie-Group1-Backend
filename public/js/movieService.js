@@ -53,10 +53,9 @@ const setReviewValues = async (parentElement, review) => {
     parentElement.append(reviewText);
     parentElement.append(reviewStars);
     parentElement.append(reviewSignature);
-
     let fullStars = Math.floor(review.rating.$numberDecimal);
-    let halfStars = review.rating % 1 != 0 ? 1 : 0;
-
+    let halfStars = review.rating.$numberDecimal % 1 != 0 ? 1 : 0;
+    
     setStarValues(reviewStars, fullStars, halfStars);
 }
 
@@ -73,7 +72,15 @@ const setCardInfo = async (card) => {
     axios.get("/reviews/reviews-by-movie?movieId=" + card.dataset.movieid).then(res => {
         if(!res.data.error) {
             const ratings = Object.values(res.data.reviews).map(review => parseFloat(review.rating.$numberDecimal));
-            let avgRating = Math.round((ratings.reduce((r1, r2) => r1 + r2) / ratings.length) * 2) / 2;
+            let avgRating = (ratings.reduce((r1, r2) => r1 + r2) / ratings.length);
+            let avgRatingDec = (avgRating % 1);
+            if(avgRatingDec > 0.75) {
+                avgRatingDec = Math.ceil(avgRating);
+            } else if (avgRatingDec < 0.25) {
+                avgRating = Math.floor(avgRating);
+            } else {
+                avgRating = Math.floor(avgRating) + 0.5;
+            }
             
             //5th child of card is the info section
             //The second child of that is the reviews listing
