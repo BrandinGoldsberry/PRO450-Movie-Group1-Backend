@@ -26,18 +26,18 @@ const initlogin = () => {
     })
 }
 
-const signup = (captchaToken) => {
-    console.log("Signing in...");
+const signup = (captchaToken, formData) => {
     let fail = false;
-    let fname = document.getElementById("registerFName").value;
-    let lname = document.getElementById("registerLName").value;
-    let email = document.getElementById("registerEmail").value;
-    let state = document.getElementById("registerState").value;
-    let street = document.getElementById("registerStreet").value;
-    let city = document.getElementById("registerCity").value;
-    let zipcode = document.getElementById("registerZipCode").value;
-    let phone = document.getElementById("registerPhone").value;
-    let password = document.getElementById("registerPassword").value;
+    console.log(formData);
+    let fname = formData[0].value;
+    let lname = formData[1].value;
+    let email = formData[2].value;
+    let state = formData[3].value;
+    let street = formData[4].value;
+    let city = formData[5].value;
+    let zipcode = formData[6].value;
+    let phone = formData[7].value;
+    let password = formData[8].value;
 
     let errorMsg = document.getElementById("signupError");
 
@@ -105,14 +105,53 @@ const signup = (captchaToken) => {
     }
 }
 
+const assignEventListener = async (message, elem, regex, errorId) => {
+    console.log(elem);
+    elem.addEventListener('keyup', (e) => {
+        let val = e.target.value;
+        let success = regex.test(val);
+        let err = document.getElementById(errorId);
+        if(!success) {
+            err.innerText = message;
+            err.className = "errorMessage";
+        } else {
+            err.innerText = "✓";
+            err.className = "validMessage";
+        }
+    })
+}
+
+const initSignupValidation = async () => {
+    let fname = document.getElementById("registerFName");
+    let lname = document.getElementById("registerLName");
+    let email = document.getElementById("registerEmail");
+    let state = document.getElementById("registerState");
+    let street = document.getElementById("registerStreet");
+    let city = document.getElementById("registerCity");
+    let zipcode = document.getElementById("registerZipCode");
+    let phone = document.getElementById("registerPhone");
+    let password = document.getElementById("registerPassword");
+
+    assignEventListener("Please enter valid first name", fname, /[A-Za-z]+/i, "fnameError");
+    assignEventListener("Please enter valid last name", lname, /[A-Za-z]+/i, "lnameError");
+    assignEventListener("Please enter valid email", email, /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i, "emailError");
+    assignEventListener("Please enter valid street", street, /[A-Za-z]+/i, "streetError");
+    assignEventListener("Please enter valid state", state, /^(?:(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|P[AR]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY]))$/, "stateError");
+    assignEventListener("Please enter valid city", city, /[A-Za-z]+/i, "cityError");
+    assignEventListener("Please enter valid zipcode", zipcode, /^\d{5}(?:[-\s]\d{4})?$/i, "zipcodeError");
+    assignEventListener("Please enter valid phone", phone, /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/i, "phoneError");
+    assignEventListener("Password must be 6 characters, minimum allowed characters: !$%^&*(){}<>?/A-Za-z0-9", password, /[!$%^&*(){}<>?\/A-Za-z0-9]{6,}/i, "passError");
+}
+
 const initSignup = () => {
-    const onSignupCaptchaCompleted = (e) => {
-        signup(e);
-    }
-    window.onSignupCaptchaCompleted = onSignupCaptchaCompleted;
+    initSignupValidation();
     let signupForm = document.getElementById("signupForm");
     signupForm.addEventListener("submit", ev => {
         ev.preventDefault();
+        const onSignupCaptchaCompleted = (e) => {
+            signup(e, ev.target);
+        }
+        window.onSignupCaptchaCompleted = onSignupCaptchaCompleted;
         let g = grecaptcha.execute();
     })
 }

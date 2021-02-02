@@ -359,4 +359,9 @@ tr:hover {
 
 .errorMessage {
     color: red;
+    margin-left: 10px;
+}
+.validMessage {
+    color: green;
+    margin-left: 10px;
 }
