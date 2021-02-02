@@ -54,7 +54,8 @@ EmailRouter.post('/reset-password', jsonParser, (req, res) => {
                     const subject = 'Reset Password';
                     const text = `Dear ${user.fname} ${user.lname}\n\n` +
                     'Use the following link to reset your password\n\n' +
-                    `http://localhost:3000/reset-password/${user.reset_pass_token}`;
+                    `http://localhost:5001/reset-pass/${user.reset_pass_token}`;
+                    // `http://localhost:3000/reset-password/${user.reset_pass_token}`;
                     sendEmail(masterEmail, user.email, subject, text, (err, info) => {
                         if (err) console.log(err);
                         else res.send(true);

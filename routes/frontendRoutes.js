@@ -150,4 +150,10 @@ FrontEndRouter.get("/signup", (req, res) => {
     res.render("signup", {});
 })
 
+FrontEndRouter.get("/reset-pass/:token", (req, res) => {
+    const token = req.params.token;
+    if (token) res.render("reset-pass", { token });
+    // else res.render('/');
+})
+
 module.exports = FrontEndRouter;

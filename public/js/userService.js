@@ -18,12 +18,30 @@ const login = (username, password) => {
     )
 }
 
+const sendResetPassEmail = email => {
+    axios.post('http://localhost:5001/email/reset-password', {
+        email
+    }).then(res => {
+        if (res) alert(`An email was sent to ${email}`);
+        else console.log('Could not send email'); // TODO error_msg
+    });
+}
+
 const initlogin = () => {
+    console.log('initializing login');
+    // Login form functionality
     let loginForm = document.getElementById("logInForm");
     loginForm.addEventListener("submit", ev => {
         ev.preventDefault();
         login(ev.target[0].value, ev.target[1].value);
-    })
+    });
+
+    // Reset pass form functionality
+    let resetPassForm = document.getElementById('resetPassForm');
+    resetPassForm.addEventListener('submit', evt => {
+        evt.preventDefault();
+        sendResetPassEmail(evt.target[0].value);
+    });
 }
 
 const signup = (captchaToken, formData) => {
