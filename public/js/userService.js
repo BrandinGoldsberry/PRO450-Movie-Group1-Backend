@@ -27,6 +27,8 @@ const initlogin = () => {
 }
 
 const signup = (captchaToken) => {
+    console.log("Signing in...");
+    let fail = false;
     let fname = document.getElementById("registerFName").value;
     let lname = document.getElementById("registerLName").value;
     let email = document.getElementById("registerEmail").value;
@@ -41,22 +43,31 @@ const signup = (captchaToken) => {
 
     if(!fname) {
         errorMsg.innerText = "Please enter a valid name";
+        fail = true;
     } else if(!lname) {
         errorMsg.innerText = "Please enter a valid name";
+        fail = true;
     } else if(!email) {
         errorMsg.innerText = "Please enter a valid email";
+        fail = true;
     } else if(!state) {
         errorMsg.innerText = "Please enter a valid state";
+        fail = true;
     } else if(!street) {
         errorMsg.innerText = "Please enter a valid Street";
+        fail = true;
     } else if(!city) {
         errorMsg.innerText = "Please enter a valid city";
+        fail = true;
     } else if(!zipcode) {
         errorMsg.innerText = "Please enter a valid zip code";
+        fail = true;
     } else if(!phone) {
         errorMsg.innerText = "Please enter a valid phone number";
+        fail = true;
     } else if(!password) {
         errorMsg.innerText = "Please enter a valid password";
+        fail = true;
     } else {
         axios.post(
             "http://localhost:5001/users/sign-up",
@@ -84,15 +95,19 @@ const signup = (captchaToken) => {
             (err) => {
                 console.log(err.response.data);
                 errorMsg.innerText = err.response.data;
+                grecaptcha.reset();
             }
         )
+    }
+    console.log(fail);
+    if(fail) {
+        grecaptcha.reset();
     }
 }
 
 const initSignup = () => {
     const onSignupCaptchaCompleted = (e) => {
-        console.log(e);
-        // signup(e);
+        signup(e);
     }
     window.onSignupCaptchaCompleted = onSignupCaptchaCompleted;
     let signupForm = document.getElementById("signupForm");
