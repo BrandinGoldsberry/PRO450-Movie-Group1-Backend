@@ -1,3 +1,80 @@
+const movie_genres = [{
+    "id": 28,
+    "name": "Action"
+},
+{
+    "id": 12,
+    "name": "Adventure"
+},
+{
+    "id": 16,
+    "name": "Animation"
+},
+{
+    "id": 35,
+    "name": "Comedy"
+},
+{
+    "id": 80,
+    "name": "Crime"
+},
+{
+    "id": 99,
+    "name": "Documentary"
+},
+{
+    "id": 18,
+    "name": "Drama"
+},
+{
+    "id": 10751,
+    "name": "Family"
+},
+{
+    "id": 14,
+    "name": "Fantasy"
+},
+{
+    "id": 36,
+    "name": "History"
+},
+{
+    "id": 27,
+    "name": "Horror"
+},
+{
+    "id": 10402,
+    "name": "Music"
+},
+{
+    "id": 9648,
+    "name": "Mystery"
+},
+{
+    "id": 10749,
+    "name": "Romance"
+},
+{
+    "id": 878,
+    "name": "Science Fiction"
+},
+{
+    "id": 10770,
+    "name": "TV Movie"
+},
+{
+    "id": 53,
+    "name": "Thriller"
+},
+{
+    "id": 10752,
+    "name": "War"
+},
+{
+    "id": 37,
+    "name": "Western"
+}]
+
 const toggleReviews = (element) => {
     let isOpen = element.dataset.open == "true";
     if(!isOpen) {
@@ -143,15 +220,35 @@ const getMovieReviews = () => {
 }
 
 const updateSearchType = () => {
+    let input = document.getElementById("movieQueryInput");
     switch (document.getElementById("searchTypeSelect").value) {
         case "Actor":
-            
+            let newInput = document.createElement("input");
+            newInput.id = "movieQueryInput";
+            newInput.type = "text";
+            newInput.name = "search";
+            newInput.placeholder = "Search Movie by Actor";
+            input.replaceWith(newInput);
             break;
         case "Genre":
-            
+            let newSelect = document.createElement("select");
+            newSelect.id = "movieQueryInput";
+            newSelect.name = "search";
+            for (const genre of movie_genres) {
+                let newOp = document.createElement("option");
+                newOp.value = genre.id;
+                newOp.innerText = genre.name;
+                newSelect.append(newOp);
+            }
+            input.replaceWith(newSelect);
             break;
         case "Title":
-            
+            let newTitleInput = document.createElement("input");
+            newTitleInput.id = "movieQueryInput";
+            newTitleInput.type = "text";
+            newTitleInput.name = "search";
+            newTitleInput.placeholder = "Search Movie by Title";
+            input.replaceWith(newTitleInput);
             break;
         default:
             break;
@@ -160,7 +257,7 @@ const updateSearchType = () => {
 
 const search = async () => {
     let searchType = document.getElementById("searchTypeSelect").value;
-    let searchQuery = document.getElementById("movieTitleInput").value;
+    let searchQuery = document.getElementById("movieQueryInput").value;
     if(searchType !== "" && searchQuery !== "") {
         location.assign(`/search?searchType=${searchType}&q=${searchQuery}`)
     }
@@ -289,5 +386,6 @@ const initializeNewReviews = async () => {
 export const movieService = {
     getMovieReviews,
     search,
-    initializeNewReviews
+    initializeNewReviews,
+    updateSearchType
 }

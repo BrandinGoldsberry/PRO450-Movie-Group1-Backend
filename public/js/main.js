@@ -62,6 +62,7 @@ window.onload = (e) => {
     movieService.getMovieReviews();
     movieService.initializeNewReviews();
     document.getElementById("movieSubmit").addEventListener("click", movieService.search);
+    document.getElementById("searchTypeSelect").addEventListener("change", movieService.updateSearchType);
     if (location.href.indexOf("login") > -1) {
         userService.initlogin();
     }
