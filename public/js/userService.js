@@ -18,12 +18,30 @@ const login = (username, password) => {
     )
 }
 
+const sendResetPassEmail = email => {
+    axios.post('http://localhost:5001/email/reset-password', {
+        email
+    }).then(res => {
+        if (res) alert(`An email was sent to ${email}`);
+        else console.log('Could not send email'); // TODO error_msg
+    });
+}
+
 const initlogin = () => {
+    console.log('initializing login');
+    // Login form functionality
     let loginForm = document.getElementById("logInForm");
     loginForm.addEventListener("submit", ev => {
         ev.preventDefault();
         login(ev.target[0].value, ev.target[1].value);
-    })
+    });
+
+    // Reset pass form functionality
+    let resetPassForm = document.getElementById('resetPassForm');
+    resetPassForm.addEventListener('submit', evt => {
+        evt.preventDefault();
+        sendResetPassEmail(evt.target[0].value);
+    });
 }
 
 const signup = (captchaToken, formData) => {
@@ -156,7 +174,54 @@ const initSignup = () => {
     })
 }
 
+const editAccount = userData => {
+    axios.put('http://localhost:5001/users/update-user', userData)
+    .then(res => {
+        if (res.data.success) console.log('Account was successfully updated!');
+        else console.log('Could not edit account');
+    });
+}
+
+const initEditAccount = async () => {
+    const userId = Cookies.get('id');
+    console.log(userId);
+    if (userId) {
+        await axios.post(`http://localhost:5001/users/get-user-by-id?userId=${userId}`)
+        .then(res => {
+            if (res.data.user) {
+                console.log(res.data.user);
+                document.getElementById('fName').value = res.data.user.fname;
+                document.getElementById('lName').value = res.data.user.lname;
+                document.getElementById('username').value = res.data.user.username;
+                document.getElementById('email').value = res.data.user.email;
+                document.getElementById('street').value = res.data.user.street;
+                document.getElementById('city').value = res.data.user.city;
+                document.getElementById('state').value = res.data.user.state;
+                document.getElementById('zipCode').value = res.data.user.zip_code;
+                document.getElementById('phone').value = res.data.user.phone;
+            }
+        });
+    } else location.replace('/');
+    let editAccountForm = document.getElementById('editAccountForm');
+    editAccountForm.addEventListener('submit', evt => {
+        evt.preventDefault();
+        editAccount({
+            userId,
+            fname: document.getElementById('fName').value,
+            lname: document.getElementById('lName').value,
+            username: document.getElementById('username').value,
+            email: document.getElementById('email').value,
+            street: document.getElementById('street').value,
+            city: document.getElementById('city').value,
+            state: document.getElementById('state').value,
+            zipCode: document.getElementById('zipCode').value,
+            phone: document.getElementById('phone').value
+        });
+    });
+}
+
 export const userService = {
     initlogin,
-    initSignup
+    initSignup,
+    initEditAccount
 }

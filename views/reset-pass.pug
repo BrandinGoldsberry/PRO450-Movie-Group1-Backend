@@ -1,0 +1,32 @@
+extends layout.pug
+
+block content
+    form.formWrapper#resetPassForm
+        h2 Reset password
+
+        input#token.inputBox(
+            type="hidden"
+            name="token"
+            value="" + token + ""
+        )
+
+        br
+
+        label(for="password") Password:
+        input#password.inputBox(
+            required
+            type="password"
+            name="password"
+        )
+
+        br
+
+        label(for="confirm") Confirm:
+        input#confirm.inputBox(
+            required
+            type="password"
+            name="confirm"
+        )
+
+        br
+        input.inputButton#resetPass(type="submit" value="Reset Password")

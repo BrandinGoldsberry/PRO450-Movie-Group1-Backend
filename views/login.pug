@@ -23,6 +23,11 @@ block content
         br
         input.inputButton#loginSubmit(type="submit" name="Log In")
 
+        br
+        if loginError
+            span.errorMessage#loginError #{loginError}
+
+    form.formWrapper#resetPassForm
         h2 Forgot password?
 
         label(for="email") Email:
@@ -32,7 +37,8 @@ block content
         )
 
         br
-        input.inputButton(type="button" value="Reset Password")
+        input.inputButton#resetPass(type="submit" value="Reset Password")
 
         br
-        span.errorMessage#loginError
+        if resetError
+            span.errorMessage#loginError #{resetError}

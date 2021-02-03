@@ -246,15 +246,16 @@ UserRouter.put("/update-user", jsonParser, (req, res) => {
     if(req.body.zip_code) newUserInfo.zip_code = req.body.zip_code;
     if(req.body.phone) newUserInfo.phone = req.body.phone;
 
+    // TODO validate creds
+
     console.log(newUserInfo);
 
     connectToMongo(() => {
         User.updateOne({_id: id}, newUserInfo).exec((err, user) => {
             console.log(user);
-            if(user != null) {
-                res.status(200).json({"error": "User not found"});
+            if(user == null) {
+                res.status(200).json({"error": "User not found", success: false});
             } else {
-                // newUser.password = bcrypt.hash(newUser.pass, 10);
                 // userToAdd = new User(newUser);
                 // userToAdd.save((err) => {
                 //     if (err) console.log(err);
@@ -262,7 +263,7 @@ UserRouter.put("/update-user", jsonParser, (req, res) => {
                 //         res.status(200).json({"user": userToAdd});
                 //     }
                 // })
-                res.status(200).json({"message": "User Updated!"});
+                res.status(200).json({"message": "User Updated!", success: true});
             }
         })
     })
