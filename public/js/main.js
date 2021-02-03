@@ -1,6 +1,7 @@
 import {stars} from './stars.js';
 import {movieService} from './movieService.js';
 import {userService} from './userService.js'
+import {passwordService} from './passwordService.js'
 
 const initHeaderButtons = () => {
     let logIn = document.getElementById("loginButton");
@@ -11,6 +12,10 @@ const initHeaderButtons = () => {
     signUpButton.addEventListener("click", (e) => {
         location.assign("/signup");
     })
+    let editAccountButton = document.getElementById("userPageButton");
+    editAccountButton.addEventListener('click', evt => {
+        location.assign('/edit');
+    });
 }
 
 const validateLogIn = () => {
@@ -56,11 +61,17 @@ window.onload = (e) => {
     stars.initializeStars();
     movieService.getMovieReviews();
     document.getElementById("movieSubmit").addEventListener("click", movieService.search);
-    if(location.href.indexOf("login") > -1) {
+    if (location.href.indexOf("login") > -1) {
         userService.initlogin();
     }
-    if(location.href.indexOf("signup") > -1) {
+    if (location.href.indexOf("signup") > -1) {
         userService.initSignup();
+    }
+    if (location.href.indexOf('edit') > -1) {
+        userService.initEditAccount();
+    }
+    if (location.href.indexOf('reset-pass') > -1) {
+        passwordService.initResetPass();
     }
     if(validateLogIn()) {
         enableAccountButtons();

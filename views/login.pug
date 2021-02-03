@@ -24,7 +24,8 @@ block content
         input.inputButton#loginSubmit(type="submit" name="Log In")
 
         br
-        span.errorMessage#loginError
+        if loginError
+            span.errorMessage#loginError #{loginError}
 
     form.formWrapper#resetPassForm
         h2 Forgot password?
@@ -39,4 +40,5 @@ block content
         input.inputButton#resetPass(type="submit" value="Reset Password")
 
         br
-        span.errorMessage#loginError
+        if resetError
+            span.errorMessage#loginError #{resetError}
