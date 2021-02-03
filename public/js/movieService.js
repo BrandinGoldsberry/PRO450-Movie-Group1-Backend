@@ -3,19 +3,18 @@ const toggleReviews = (element) => {
     if(!isOpen) {
         let height = element.dataset.hideheight;
         element.style.transform = `translateY(0px)`;
-        element.parentElement.style.height = `auto`;
+        let pHeight = element.scrollHeight;
+        element.parentElement.style.height = `${pHeight + 100}px`;
     } else {
-        let height = element.dataset.hideheight;
+        let height = element.scrollHeight * -1;
         element.style.transform = `translateY(${height}px)`;
-        setTimeout(() => {
-            element.parentElement.style.height = '0px';
-        }, 401);
+        element.parentElement.style.height = '0px';
     }
     if(isOpen && Cookies.get("id")) {
-        element.parentElement.nextSibling.className = "new-review hide-show hide";
-        setTimeout(() => {element.parentElement.nextSibling.className = "new-review hide-show disabled hide";}, 505)
+        element.children[0].className = "new-review hide-show hide";
+        setTimeout(() => {element.children[0].className = "new-review hide-show disabled hide";}, 505)
     } else {
-        element.parentElement.nextSibling.className = "new-review hide-show show";
+        element.children[0].className = "new-review hide-show show";
     }
     element.dataset.open = !isOpen;
 }
@@ -109,7 +108,6 @@ const setCardInfo = async (card) => {
             
             let reviewList = document.getElementById("review-list-" + card.dataset.movieid);
             let hideHeight = res.data.reviews.length * -100;
-            reviewList.dataset.hideheight = hideHeight;
             reviewList.dataset.open = false;
             reviewList.style.transform = `translateY(${hideHeight}px)`;
             reviewList.parentElement.style.height = '0px';
@@ -124,6 +122,15 @@ const setCardInfo = async (card) => {
             //emptyStars = Math.floor(5 - curRating);
             setStarValues(cardAvgRating, fullStars, halfStars);
             createReviewList(reviewList, res.data.reviews);
+        } else {
+            let reviewList = document.getElementById("review-list-" + card.dataset.movieid);
+            let hideHeight = -100;
+            reviewList.dataset.open = false;
+            reviewList.style.transform = `translateY(${hideHeight}px)`;
+            reviewList.parentElement.style.height = '0px';
+            reviewList.parentElement.parentElement.children[4].children[1].addEventListener('click', () => {
+                toggleReviews(reviewList);
+            })
         }
     })
 }
@@ -232,7 +239,8 @@ const initializeNewReview = async (newReview) => {
             movieId: starsDOM.dataset.movieid,
             username: Cookies.get("username")
         }).then((res) => {
-            let reviewList = newReview.previousSibling.children[0];
+            let reviewList = newReview.parentElement;
+            console.log(reviewList);
             let reviewNode = document.createElement("div");
             reviewNode.className = "user-review";
             
@@ -259,7 +267,8 @@ const initializeNewReview = async (newReview) => {
             reviewList.append(reviewNode);
             let fullStars = starsDOM.dataset.ratingval;
             let halfStars = 0;
-            
+            reviewList.parentElement.style.height = reviewList.scrollHeight + 100;
+
             setStarValues(reviewStars, fullStars, halfStars);
         }).catch((err) => {
 
