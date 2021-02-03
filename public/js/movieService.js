@@ -3,11 +3,19 @@ const toggleReviews = (element) => {
     if(!isOpen) {
         let height = element.dataset.hideheight;
         element.style.transform = `translateY(0px)`;
-        element.parentElement.style.height = `${height * -1}px`;
+        element.parentElement.style.height = `auto`;
     } else {
         let height = element.dataset.hideheight;
         element.style.transform = `translateY(${height}px)`;
-        element.parentElement.style.height = '0px';
+        setTimeout(() => {
+            element.parentElement.style.height = '0px';
+        }, 401);
+    }
+    if(isOpen && Cookies.get("id")) {
+        element.parentElement.nextSibling.className = "new-review hide-show hide";
+        setTimeout(() => {element.parentElement.nextSibling.className = "new-review hide-show disabled hide";}, 505)
+    } else {
+        element.parentElement.nextSibling.className = "new-review hide-show show";
     }
     element.dataset.open = !isOpen;
 }
@@ -82,6 +90,11 @@ const setCardInfo = async (card) => {
                 avgRating = Math.floor(avgRating) + 0.5;
             }
             
+            let poster = card.children[2];
+            poster.addEventListener('click', (e) => {
+                location.assign("/movie/" + card.dataset.movieid);
+            })
+
             //5th child of card is the info section
             //The second child of that is the reviews listing
             //The second child of that is the review counter
@@ -95,7 +108,7 @@ const setCardInfo = async (card) => {
             cardAvgRating.dataset.ratingval = avgRating;
             
             let reviewList = document.getElementById("review-list-" + card.dataset.movieid);
-            let hideHeight = res.data.reviews.length * -150;
+            let hideHeight = res.data.reviews.length * -100;
             reviewList.dataset.hideheight = hideHeight;
             reviewList.dataset.open = false;
             reviewList.style.transform = `translateY(${hideHeight}px)`;
@@ -146,7 +159,126 @@ const search = async () => {
     }
 }
 
+const initEditableStars = (stars) => {
+    const calcStarPreview = (e) => {
+        var arr = Array.prototype.slice.call(stars.children)
+        let curHover = arr.indexOf(e.target.parentElement);
+        return curHover;
+    }
+
+    const updateStarPreview = (starVals) => {
+        for (let i = 0; i <= 4; i++) {
+            let currentStar = stars.children[i];
+            if(currentStar.children[0]) {
+                if(i <= starVals) {
+                    currentStar.children[0].className = currentStar.dataset["full"];
+                } else {
+                    currentStar.children[0].className = currentStar.dataset["empty"];
+                }
+            } else {
+                let newIcon = document.createElement("i");
+                if(i <= starVals) {
+                    newIcon.className = currentStar.dataset["full"];
+                } else {
+                    newIcon.className = currentStar.dataset["empty"];
+                }
+                currentStar.append(newIcon)
+            }
+        }
+    }
+
+    const clearStars = (e) => {
+        updateStarPreview(-1);
+    }
+
+    const updateStars = (e) => {
+        let starVals = calcStarPreview(e);
+        updateStarPreview(starVals);
+    }
+
+    for (let i = 1; i <= 5; i++) {
+        let currentStar = stars.children[i - 1];
+        currentStar.innerHTML = "";
+        let newIcon = document.createElement("i");
+        newIcon.className = currentStar.dataset["empty"];
+        currentStar.append(newIcon)
+        currentStar.addEventListener("mouseover", updateStars);
+
+        currentStar.addEventListener("click", (e) => {
+            let starVals = calcStarPreview(e);
+            console.log(e);
+            stars.removeEventListener("mouseout", clearStars);
+            stars.addEventListener("mouseout", (e) => {
+                updateStarPreview(starVals);
+            })
+            stars.dataset.ratingval = starVals + 1;
+        });
+    }
+    stars.addEventListener("mouseout", clearStars);
+
+}
+
+const initializeNewReview = async (newReview) => {
+    //init star rating
+    let starsDOM = newReview.children[0];
+    initEditableStars(starsDOM);
+
+    let reviewTextDOM = newReview.children[1];
+    newReview.children[2].addEventListener("click", (e) => {
+        axios.post("/reviews/post-review", {
+            email: Cookies.get("email"),
+            reviewText: reviewTextDOM.value,
+            rating: starsDOM.dataset.ratingval,
+            movieId: starsDOM.dataset.movieid,
+            username: Cookies.get("username")
+        }).then((res) => {
+            let reviewList = newReview.previousSibling.children[0];
+            let reviewNode = document.createElement("div");
+            reviewNode.className = "user-review";
+            
+            let reviewText = document.createElement("p");
+            reviewText.innerText = `"${reviewTextDOM.value}"`;
+            
+            let reviewStars = document.createElement("div");
+            reviewStars.className = "stars";
+            for(let i in [0, 1, 2, 3, 4]) {
+                let star = document.createElement("span");
+                star.className = "ratingStar";
+                star.dataset["full"] = "fa fa-star";
+                star.dataset["half"] = "fa fa-star-half-alt";
+                star.dataset["empty"] = "far fa-star";
+                reviewStars.append(star);
+            }
+            
+            let reviewSignature = document.createElement("p");
+            reviewSignature.innerText = ` - ${Cookies.get("username")}`;
+            
+            reviewNode.append(reviewText);
+            reviewNode.append(reviewStars);
+            reviewNode.append(reviewSignature);
+            reviewList.append(reviewNode);
+            let fullStars = starsDOM.dataset.ratingval;
+            let halfStars = 0;
+            
+            setStarValues(reviewStars, fullStars, halfStars);
+        }).catch((err) => {
+
+        });
+    })
+}
+
+const initializeNewReviews = async () => {
+    if(Cookies.get("id")) {
+        let newReviews = document.getElementsByClassName("new-review");
+        for (const newReview of newReviews) {
+            newReview.className = "new-review disabled hide";
+            initializeNewReview(newReview);
+        }
+    }
+}
+
 export const movieService = {
     getMovieReviews,
-    search
+    search,
+    initializeNewReviews
 }

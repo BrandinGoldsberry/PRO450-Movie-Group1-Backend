@@ -46,10 +46,11 @@ table {
     padding: 0;
 }
 
-i{ font-family: 'FontAwesome' }
+i{ font-family: 'FontAwesome'; display: block; }
 
 div, p, a {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Markazi Text';
+    font-size: 20px;
 }
 
 a {
@@ -72,7 +73,7 @@ h3 {
 button {
     cursor: pointer;
     display: inline-block;
-    margin: 5px !important;
+    margin: 5px;
     text-decoration: none;
     background-color: rgb(91, 184, 212) !important;
     border: rgb(91, 184, 212) solid 3px !important;
@@ -142,7 +143,7 @@ p {
     text-decoration: none;
     color: unset;
     margin-left: 5px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Roboto Slab';
     font-size: 1rem;
     font-weight: bold;
     justify-self: left;
@@ -158,6 +159,18 @@ p {
     margin-right: auto;
 }
 
+.hide-show {
+    transition: opacity 0.5s;
+}
+
+.hide {
+    opacity: 0;
+}
+
+.show {
+    opacity: 1;
+}
+
 .title-wrap {
     display: flex;
     align-items: flex-end;
@@ -165,10 +178,15 @@ p {
 }
 
 .movie-title {
+    font-family: 'Roboto Slab';
+    font-weight: 600;
     display: block;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    font-size: 25px;
+    margin-bottom: 5px;
+    min-height: 30px;
 }
 
 .movie-card {
@@ -194,6 +212,7 @@ p {
     display: block;
     margin-bottom: 7.5%;
     transition: all 0.1s;
+    cursor: pointer;
 }
 
 .movie-poster:hover {
@@ -202,13 +221,25 @@ p {
 }
 
 .overall-rating {
-    display: inline-flex; 
-    flex-direction: row;
-    margin-bottom: 5px;
+    display: flex; 
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.rating-stack {
+    display: flex;
+    flex-direction: column;
+}
+
+.show-review-button {
+    display: block;
+    width: 100%;
+    margin: 0px;
 }
 
 .rating-amount {
     line-height: 32px;
+    margin: 0px;
 }
 
 .reviews-mask {
@@ -248,6 +279,11 @@ p {
 
 .ratingStar i.far.fa-star {
     color: black;
+}
+
+.stars-editable {
+    cursor: pointer;
+    display: inline;
 }
 
 .disabled {

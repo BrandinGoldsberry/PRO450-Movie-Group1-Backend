@@ -35,7 +35,7 @@ const enableAccountButtons = () => {
     let userPageButton = document.getElementById("userPageButton");
     let logOutButton = document.getElementById("logOutButton");
 
-    if(Cookies.get("admin") == true) {
+    if(Cookies.get("admin") === "true") {
         adminButton.className = "";
     }
     userPageButton.className = "";
@@ -55,6 +55,7 @@ window.onload = (e) => {
     initHeaderButtons();
     stars.initializeStars();
     movieService.getMovieReviews();
+    movieService.initializeNewReviews();
     document.getElementById("movieSubmit").addEventListener("click", movieService.search);
     if(location.href.indexOf("login") > -1) {
         userService.initlogin();
