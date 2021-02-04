@@ -19,11 +19,16 @@ const login = (username, password) => {
 }
 
 const sendResetPassEmail = email => {
+    const resetPassError = document.getElementById('resetPassError');
+    resetPassError.innerText = '';
     axios.post('http://localhost:5001/email/reset-password', {
         email
     }).then(res => {
-        if (res) alert(`An email was sent to ${email}`);
-        else console.log('Could not send email'); // TODO error_msg
+        console.log(res.data);
+        if (res.data) {
+            document.getElementById('email').value = "";
+            alert(`An email was sent to ${email}`);
+        } else resetPassError.innerText = 'Could not send email';
     });
 }
 
@@ -124,7 +129,7 @@ const signup = (captchaToken, formData) => {
     }
 }
 
-const assignEventListener = async (message, elem, regex, errorId, somethingNormal = false) => {
+const assignEventListener = async (message, elem, regex, errorId, validateImmediately = false) => {
     elem.addEventListener('keyup', evt => {
         let val = evt.target.value;
         let success = regex.test(val);
@@ -137,7 +142,7 @@ const assignEventListener = async (message, elem, regex, errorId, somethingNorma
             err.className = "validMessage";
         }
     });
-    if (somethingNormal) {
+    if (validateImmediately) {
         const event = document.createEvent('Event');
         event.initEvent('keyup', true, true);
         elem.dispatchEvent(event);

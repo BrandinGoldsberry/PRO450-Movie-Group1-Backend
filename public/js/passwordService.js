@@ -32,7 +32,12 @@ const resetPassword = (token, password, confirm) => {
                 token,
                 password
             }).then(res => {
-                if (res) alert('Password was successfully updated!');
+                if (res) {
+                    setTimeout(() => {
+                        location.replace("/");
+                    }, 5000);
+                    alert('Password was successfully updated! You will be redirected to the home page in 5 seconds.');
+                }
                 else errorMsg.innerText = 'Could not reset password';
             });
         } else errorMsg.innerText = 'Passwords do not match';
@@ -46,13 +51,21 @@ const initResetPassValidation = () => {
     confirm.addEventListener('keyup', validationEvent);
 }
 
-const initResetPass = () => {
-    initResetPassValidation();
-    const resetPassForm = document.getElementById('resetPassForm');
-    resetPassForm.addEventListener('submit', evt => {
-        evt.preventDefault();
-        resetPassword(evt.target[0].value, evt.target[1].value, evt.target[2].value);
-    });
+const validateResetToken = async token => {
+    let result = await axios.get(`http://localhost:5001/users/validate-reset-token?token=${token}`);
+    return result.data;
+}
+
+const initResetPass = async () => {
+    const token = document.getElementById('token').value;
+    if (await validateResetToken(token)) {
+        initResetPassValidation();
+        const resetPassForm = document.getElementById('resetPassForm');
+        resetPassForm.addEventListener('submit', evt => {
+            evt.preventDefault();
+            resetPassword(evt.target[0].value, evt.target[1].value, evt.target[2].value);
+        });
+    } else location.replace('/');
 }
 
 export const passwordService = {
