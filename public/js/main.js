@@ -6,11 +6,11 @@ import { adminDashboard } from './adminDashboardService.js'
 
 
 const initHeaderButtons = () => {
-    let logIn = document.getElementById("loginButton");
+    let logIn = document.getElementById("loginButtonFloat");
     logIn.addEventListener("click", (e) => {
         location.assign("/login");
     })
-    let signUpButton = document.getElementById("signUpButton");
+    let signUpButton = document.getElementById("signUpButtonFloat");
     signUpButton.addEventListener("click", (e) => {
         location.assign("/signup");
     })

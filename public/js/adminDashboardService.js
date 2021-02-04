@@ -15,9 +15,10 @@ const search = async () => {
         for (const user in userList) {
             if (Object.hasOwnProperty.call(userList, user)) {
                 const element = userList[user];
-
+                
                 var newRow = tableAD.insertRow();
                 newRow.setAttribute("data-user-id", element["_id"])
+                newRow.setAttribute("data-user-username", element["username"])
                 newRow.className = "adminTable-row"
 
                 var usernameCell = newRow.insertCell()
@@ -48,17 +49,20 @@ const getUserInfo = async (e) => {
     userCleanUp();
     const element = e.currentTarget;
     const userId = element.getAttribute("data-user-id");
+    var buttonDiv = document.getElementById("adminDashboard-button-div");
     var reviewDiv = document.getElementById("adminDashboard-review-div");
     const resUser = await axios.post(`http://localhost:5001/users/is-user-admin?userId=${userId}`);
     const user = resUser.data || undefined;
+    const currentUserId = Cookies.get("id");
+    const username = element.getAttribute("data-user-username");
 
-    console.log(user)
+    // console.log(username);/
 
-    if(user){
-        if(!user.superAdmin){
-            
-        }
-    }
+    // console.log(user)
+
+
+
+    getUserButtons(user, userId, currentUserId, username);
 
     // console.log(userId)
     const resUserReviews = await axios.get(`http://localhost:5001/reviews/get-reviews-by-user?userId=${userId}`)
@@ -79,7 +83,6 @@ const getUserInfo = async (e) => {
     } else {
         // console.log(userReviews)
         // console.log(userReviews.length)
-        var reviewDiv = document.getElementById("adminDashboard-review-div");
 
         var header = document.createElement("h1");
         header.id = "adminDashboard-review-header"
@@ -96,8 +99,6 @@ const getUserInfo = async (e) => {
                 // console.log(element["rating"]["$numberDecimal"])
                 var reviewText = element["review"];
                 // console.log(element["review"])
-                var username = element["username"];
-                // console.log(element["username"])
 
 
                 var createCardDiv = document.createElement("div");
@@ -116,12 +117,11 @@ const getUserInfo = async (e) => {
                 createElement("p", "adminDashboard-card-username", null, `- ${username}`, createCardDiv);
 
 
-                var createReviewDeleteButton = document.createElement("button");
-                createReviewDeleteButton.className = "adminDashboard-card-delete";
-                createReviewDeleteButton.innerHTML = "Delete Review";
-                createReviewDeleteButton.addEventListener("click", (e) => { deleteReview(e) });
-                createCardDiv.appendChild(createReviewDeleteButton);
-
+                var deleteReviewButton = document.createElement("button");
+                deleteReviewButton.className = "adminDashboard-card-delete-review";
+                deleteReviewButton.innerHTML = "Delete Review";
+                deleteReviewButton.addEventListener("click", (e) => { deleteReview(e) });
+                createCardDiv.appendChild(deleteReviewButton);
             }
         }
     }
@@ -150,7 +150,48 @@ const cleanUp = () => {
 
 }
 
+const getUserButtons = (user, userId, currentUserId, username) => {
+    var buttonDiv = document.getElementById("adminDashboard-button-div");
+    const isUserSuperAdmin = Boolean(Cookies.get("superadmin"));
+    console.log(isUserSuperAdmin);
+    if (userId != currentUserId) {
+        if (!user["superAdmin"] && user["admin"] || !user["superAdmin"] && !user["admin"]) {
+            var deleteUserButton = document.createElement("button");
+            deleteUserButton.className = "adminDashboard-card-delete-review-user";
+            deleteUserButton.innerHTML = "Delete User";
+            deleteUserButton.setAttribute("data-user-username", username);
+            deleteUserButton.addEventListener("click", (e) => { deleteUserCheck(e) });
+            buttonDiv.appendChild(deleteUserButton);
+        }
+        if (isUserSuperAdmin) {
+            if (!user["superAdmin"] && user["admin"]) {
+                var removeAdminButton = document.createElement("button");
+                removeAdminButton.className = "adminDashboard-card-remove-admin";
+                removeAdminButton.innerHTML = "Remove Admin Privileges";
+                removeAdminButton.setAttribute("data-user-username", username);
+                removeAdminButton.addEventListener("click", (e) => { removeAdminCheck(e) });
+                buttonDiv.appendChild(removeAdminButton);
+            }
+            if (!user["superAdmin"] && !user["admin"]) {
+                var addAdminButton = document.createElement("button");
+                addAdminButton.className = "adminDashboard-card-remove-admin";
+                addAdminButton.innerHTML = "Add Admin Privileges";
+                addAdminButton.setAttribute("data-user-username", username);
+                addAdminButton.addEventListener("click", (e) => { addAdmin(e) });
+                buttonDiv.appendChild(addAdminButton);
+            }
+        }
+    }
+}
+
 const userCleanUp = () => {
+    var buttonDiv = document.getElementById("adminDashboard-button-div") || null;
+    if (buttonDiv) {
+        while (buttonDiv.firstChild) {
+            buttonDiv.removeChild(buttonDiv.firstChild);
+        }
+    }
+
     var reviewDiv = document.getElementById("adminDashboard-review-div") || null;
     if (reviewDiv) {
         while (reviewDiv.firstChild) {
@@ -186,6 +227,53 @@ const deleteReview = (e) => {
     ).catch((error) => {
         console.error(error);
     });
+
+}
+
+const deleteUserCheck = (e) => {
+    const element = e.target;
+    e.nodeTarget
+}
+
+const removeAdminCheck = (e) => {
+    const element = e.target;
+    const userUsername = element.getAttribute("data-user-username");
+    const parent = element.parentElement;
+    const childDelete = parent.children.item(0);
+
+    console.log(childDelete);
+
+    // console.log(element);
+
+    parent.removeChild(childDelete);
+    parent.removeChild(element);
+
+    var confirmText = document.createElement("h2");
+    confirmText.className = "adminDashboard-card-remove-admin-text";
+    var userUsernameFormat = userUsername[-1] === 's' ? `${userUsername}'` : `${userUsername}'s`
+    confirmText.innerHTML = `Are you sure you want to remove ${userUsernameFormat} admin privileges?`;
+    confirmText.addEventListener("click", (e) => { removeAdmin(e) });
+    parent.appendChild(confirmText);
+
+    var confirmButton = document.createElement("button");
+    confirmButton.className = "adminDashboard-card-remove-admin-confirm";
+    confirmButton.innerHTML = "Confirm";
+    confirmButton.addEventListener("click", (e) => { removeAdmin(e) });
+    parent.appendChild(confirmButton);
+
+
+    var cancelButton = document.createElement("button");
+    cancelButton.className = "adminDashboard-card-remove-admin-cancel";
+    cancelButton.innerHTML = "Cancel ";
+    cancelButton.addEventListener("click", () => {
+        parent.removeChild(confirmText);
+        parent.removeChild(confirmButton);
+        parent.removeChild(cancelButton);
+        parent.appendChild(childDelete);
+        parent.appendChild(element);
+
+    });
+    parent.appendChild(cancelButton);
 
 }
 

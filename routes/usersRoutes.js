@@ -249,39 +249,40 @@ UserRouter.post("/create-admin", jsonParser, (req, res) => {
 // });
 
 UserRouter.put("/update-user", jsonParser, (req, res) => {
-    var newUserInfo = {}
     var id = req.body.userId;
-    // id = mongoose.Types.ObjectId(id);
-    if(req.body.username) newUserInfo.username = req.body.username;
-    if(req.body.password) newUserInfo.hashed_password = bcrypt.hashSync(req.body.password, 10);
-    if(req.body.email) newUserInfo.email = req.body.email;
-    if(req.body.fname) newUserInfo.fname = req.body.fname;
-    if(req.body.lname) newUserInfo.lname = req.body.lname;
-    if(req.body.street) newUserInfo.street = req.body.street;
-    if(req.body.city) newUserInfo.city = req.body.city;
-    if(req.body.state) newUserInfo.state = req.body.state;
-    if(req.body.zip_code) newUserInfo.zip_code = req.body.zip_code;
-    if(req.body.phone) newUserInfo.phone = req.body.phone;
+    var newUserInfo = {
+        fname: req.body.fname,
+        lname: req.body.lname,
+        username: req.body.username,
+        email: req.body.email,
+        street: req.body.street,
+        city: req.body.city,
+        state: req.body.state,
+        zip_code: req.body.zipCode,
+        phone: req.body.phone
+    }
+    const response = (message, success = false) => {
+        return {message, success}
+    }
 
-    // TODO validate creds
+    if (!newUserInfo.fname, !newUserInfo.lname, !newUserInfo.username, !newUserInfo.email, !newUserInfo.street, !newUserInfo.city, !newUserInfo.state, !newUserInfo.zip_code, !newUserInfo.phone) {
+        return res.status(200).json(response('Not all fields have been filled out.'));
+    }
 
-    console.log(newUserInfo);
+    if (!/[A-Za-z]+/i.test(newUserInfo.fname)) return res.status(200).json(response('Please enter valid first name'));
+    if (!/[A-Za-z]+/i.test(newUserInfo.lname)) return res.status(200).json(response('Please enter valid last name'));
+    if (!/[A-Za-z]{5,}/i.test(newUserInfo.username)) return res.status(200).json(response('Please enter valid username'));
+    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(newUserInfo.email)) return res.status(200).json(response('Please enter valid email'));
+    if (!/[A-Za-z]+/i.test(newUserInfo.street)) return res.status(200).json(response('Please enter valid street'));
+    if (!/^(?:(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|P[AR]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY]))$/.test(newUserInfo.state)) return res.status(200).json(response('Please enter valid state'));
+    if (!/[A-Za-z]+/i.test(newUserInfo.city)) return res.status(200).json(response('Please enter valid city'));
+    if (!/^\d{5}(?:[-\s]\d{4})?$/i.test(newUserInfo.zip_code)) return res.status(200).json(response('Please enter valid zipcode'));
+    if (!/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/i.test(newUserInfo.phone)) return res.status(200).json(response('Please enter valid phone'));
 
     connectToMongo(() => {
         User.updateOne({_id: id}, newUserInfo).exec((err, user) => {
-            console.log(user);
-            if(user == null) {
-                res.status(200).json({"error": "User not found", success: false});
-            } else {
-                // userToAdd = new User(newUser);
-                // userToAdd.save((err) => {
-                //     if (err) console.log(err);
-                //     else {
-                //         res.status(200).json({"user": userToAdd});
-                //     }
-                // })
-                res.status(200).json({"message": "User Updated!", success: true});
-            }
+            if(user == null) return res.status(200).json(response('User not found'));
+            else return res.status(200).json(response('Account was successfully updated!', true));
         })
     })
 })
