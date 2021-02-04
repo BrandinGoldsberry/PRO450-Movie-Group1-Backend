@@ -204,6 +204,10 @@ const setCardInfo = async (card) => {
             setStarValues(cardAvgRating, fullStars, halfStars);
             createReviewList(reviewList, res.data.reviews);
         } else {
+            let poster = card.children[2];
+            poster.addEventListener('click', (e) => {
+                location.assign("/movie/" + card.dataset.movieid);
+            })
             let reviewList = document.getElementById("review-list-" + card.dataset.movieid);
             let hideHeight = -100;
             reviewList.dataset.open = false;
@@ -216,10 +220,43 @@ const setCardInfo = async (card) => {
     })
 }
 
+const setSingleMovieReviews = (reviewList) => {
+    axios.get("/reviews/reviews-by-movie?movieId=" + reviewList.dataset.movieid).then(res => { 
+        if(!res.data.error) {
+            const ratings = Object.values(res.data.reviews).map(review => parseFloat(review.rating.$numberDecimal));
+            let avgRating = (ratings.reduce((r1, r2) => r1 + r2) / ratings.length);
+            let avgRatingDec = (avgRating % 1);
+            if(avgRatingDec > 0.75) {
+                avgRatingDec = Math.ceil(avgRating);
+            } else if (avgRatingDec < 0.25) {
+                avgRating = Math.floor(avgRating);
+            } else {
+                avgRating = Math.floor(avgRating) + 0.5;
+            }
+            
+            let cardAvgRating = reviewList.parentElement.previousSibling.firstChild.firstChild;
+            cardAvgRating.dataset.ratingval = avgRating;
+            cardAvgRating.nextSibling.innerText = ratings.length + " ratings";
+
+            let curRating = avgRating;
+
+            let fullStars = Math.floor(curRating);
+            let halfStars = curRating % 1 != 0 ? 1 : 0;
+            //emptyStars = Math.floor(5 - curRating);
+            setStarValues(cardAvgRating, fullStars, halfStars);
+            createReviewList(reviewList, res.data.reviews);
+        }
+    })
+}
+
 const getMovieReviews = () => {
     let cards = document.getElementsByClassName("movie-card");
     for (const card of cards) {
         setCardInfo(card);
+    }
+    if(location.href.indexOf("movie") > -1) {
+        let reviewList = document.getElementsByClassName("reviews-list")[0];
+        setSingleMovieReviews(reviewList);
     }
 }
 
@@ -382,7 +419,8 @@ const initializeNewReviews = async () => {
     if(Cookies.get("id")) {
         let newReviews = document.getElementsByClassName("new-review");
         for (const newReview of newReviews) {
-            newReview.className = "new-review disabled hide";
+            newReview.className = "new-review";
+            newReview.parentElement.parentElement.className = "reviews-mask disable-scroll"
             initializeNewReview(newReview);
         }
     }

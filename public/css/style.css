@@ -408,7 +408,7 @@ tr:hover {
     overflow-y: scroll;
 }
 
-#moviePageContainer{
+.movie-page-container{
     display: flex;
     align-self: center;
     margin: auto;
@@ -418,12 +418,12 @@ tr:hover {
     /* background-color: rgba(128, 128, 128, 0.157); */
 }
 
-#moviePoster{
+.movie-poster-single {
     width: fit-content;
     margin: 1rem;
 }
 
-#movieInformationWrapper{
+.movie-information-wrapper {
     display: flex;
     width: 50% !important;
     flex-direction: column;
@@ -431,32 +431,32 @@ tr:hover {
     margin: 1rem;
 }
 
-#movieUnderTitleInfo{
+.movie-under-title-info {
     width: fit-content;
 }
 
-#movieName{
+.movie-name {
     width: fit-content;
 }
 
-#movieName h2{
+.movie-name h2 {
     font-weight: bold;
 }
 
-#movieTagLine{
+.movie-tag-line {
     width: fit-content;
 }
 
-#movieOverview{
+.movie-overview {
     width: 80%;
 }
 
 @media screen and (max-width: 950px) {
-    #moviePageContainer{
+    .movie-page-container {
         flex-direction: column;
     }
     
-    #movieOverview{
+    .movie-overview {
         width: fit-content;
     }
   }
@@ -468,6 +468,10 @@ tr:hover {
 .validMessage {
     color: green;
     margin-left: 10px;
+}
+
+.disable-scroll {
+    overflow: visible;
 }
 
 /* Form Begin */
