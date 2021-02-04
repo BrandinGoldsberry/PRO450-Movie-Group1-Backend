@@ -87,9 +87,13 @@ const toggleReviews = (element) => {
         element.style.transform = `translateY(${height * -1}px)`;
         element.parentElement.style.height = '0px';
     }
-    if(isOpen && Cookies.get("id")) {
-        element.children[0].className = "new-review hide-show hide";
-        setTimeout(() => {element.children[0].className = "new-review hide-show disabled hide";}, 505)
+    if(Cookies.get("id")) {
+        if(isOpen) {
+            element.children[0].className = "new-review hide-show hide";
+            setTimeout(() => {element.children[0].className = "new-review hide-show disabled hide";}, 505)
+        } else {
+            element.children[0].className = "new-review hide-show show";
+        }
     } else {
         element.children[0].className = "new-review disabled hide-show show";
     }
