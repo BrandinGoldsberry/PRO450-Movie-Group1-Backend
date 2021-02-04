@@ -26,14 +26,22 @@ html
                     option(value="Genre") Genre
                 button#movieSubmit.search-button 
                     i.fas.fa-search
+                .regular-nav
+                    button#adminButton.disabled DashBoard
+                    button#userPageButton.disabled
+                    button#logOutButton.disabled
+                        i.fas.fa-sign-out-alt
 
-                button#adminButton.disabled DashBoard
-                button#userPageButton.disabled
-                button#logOutButton.disabled
-                    i.fas.fa-sign-out-alt
+                    button#loginButton Login
+                    button#signUpButton Sign Up
+        div.floating-nav
+            button#adminButtonFloat.disabled DashBoard
+            button#userPageButtonFloat.disabled
+            button#logOutButtonFloat.disabled
+                i.fas.fa-sign-out-alt
 
-                button#loginButton Login
-                button#signUpButton Sign Up
+            button#loginButtonFloat Login
+            button#signUpButtonFloat Sign Up
         block content
         footer
             script( type="module" src="/js/main.js")

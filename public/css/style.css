@@ -64,6 +64,7 @@ input[type="submit"] {
     background: none;
     color: none;
     cursor: pointer;
+    font: inherit;
 }
 
 h3 {
@@ -118,6 +119,7 @@ p {
     border-bottom: rgb(221, 221, 221) solid 1.5px;
     margin-bottom: 10px;
     justify-content: space-evenly;
+    width: 100%;
 }
 
 .nav-buttons {
@@ -140,6 +142,35 @@ p {
 
 .nav-buttons input, select {
     font-size: 2vh;
+}
+
+@media screen and (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        height: 8vh;
+    }
+}
+
+.floating-nav{
+    position: fixed;
+    display: none;
+    width: 100%;
+    bottom: 0;
+    font-size: 4vw;
+    height: 8vh;
+    align-items: center;
+    justify-content: center;
+    background-color: lightgray;
+    box-shadow: black -2px;
+}
+
+@media screen and (max-width: 600px) {
+    .regular-nav {
+        display: none;
+    }
+    .floating-nav{
+        display: flex;
+    }
 }
 
 .nav-bar-title {
