@@ -3,6 +3,9 @@ extends layout.pug
 block content
     form.formWrapper#logInForm
         h2 Log In
+        span.errorMessage#loginError
+        br
+
         label(for="loginUsername") Username:
         input.inputBox#loginUsername(
             required
@@ -29,6 +32,8 @@ block content
 
     form.formWrapper#resetPassForm
         h2 Forgot password?
+        span.errorMessage#resetPassError
+        br
 
         label(for="email") Email:
         input#email.inputBox(

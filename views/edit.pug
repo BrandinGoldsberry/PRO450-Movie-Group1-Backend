@@ -2,8 +2,8 @@ extends layout
 
 block content
     form.formWrapper#editAccountForm
-        h2 Sign Up
-        span.errorMessage#signupError
+        h2 Edit Account
+        span.errorMessage#editAccountError
         br
 
         label(for="fName") First Name: 
@@ -30,7 +30,7 @@ block content
             required
             name="username")
 
-        span.errorMessage#lnameError
+        span.errorMessage#usernameError
         br
 
         label(for="email") Email: 
