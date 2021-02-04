@@ -49,7 +49,7 @@ table {
 i{ font-family: 'FontAwesome'; display: block; }
 
 div, p, a {
-    font-family: 'Markazi Text';
+    font-family: 'Markazi Text', sans-serif;
     font-size: 20px;
 }
 
@@ -177,7 +177,7 @@ p {
     text-decoration: none;
     color: unset;
     margin-left: 5px;
-    font-family: 'Roboto Slab';
+    font-family: 'Roboto Slab', serif;
     font-size: 1.5vh;
     font-weight: bold;
     justify-content: flex-start;
@@ -221,7 +221,7 @@ p {
 }
 
 .movie-title {
-    font-family: 'Roboto Slab';
+    font-family: 'Roboto Slab', serif;
     font-weight: 600;
     display: block;
     text-overflow: ellipsis;
@@ -459,5 +459,88 @@ tr:hover {
 }
 
 /* Form Begin */
+form.formWrapper {
+    min-width: 320px;
+    max-width: 450px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgb(240, 240, 240);
+    box-shadow: 0 10px 20px -8px rgba(128, 128, 128);
+}
+form.formWrapper h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: 'Roboto Slab', serif;
+}
+form.formWrapper label {
+    display: inline-block;
+    width: 25%;
+    height: 30px;
+    line-height: 30px;
+    font-family: 'Roboto Slab', serif;
+    font-size: 14px;
+}
+form.formWrapper input:not([type=submit]) {
+    display: inline-block;
+    width: calc(75% - 16px - 10px); /* remaining space - valid message (constant width of 16px with left margin of 10px) */
+    height: 30px;
+    padding-left: 5px;
+    margin-bottom: 6px;
+    font-family: 'Markazi Text', sans-serif;
+    font-size: 20px;
+}
+form.formWrapper .validMessage {
+    display: inline-block;
+    width: 16px;
+    font-family: 'Markazi Text', sans-serif;
+    font-size: 20px;
+}
+form.formWrapper .errorMessage {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 6px;
+    margin-left: 0;
+    font-family: 'Markazi Text', sans-serif;
+    font-size: 20px;
+}
+form.formWrapper input[type=submit] {
+    padding: 5px;
 
+    display: block;
+    margin: 14px auto 6px auto;
+
+    background-color: aqua;
+    font-family: 'Markazi Text', sans-serif;
+    font-size: 20px;
+
+    /* button */
+    cursor: pointer;
+    /* display: inline-block; */
+    /* margin: 5px; */
+    text-decoration: none;
+    background-color: rgb(91, 184, 212);
+    border: rgb(91, 184, 212) solid 3px;
+    color: white;
+    box-shadow: 0px 0px 0 rgb(91 184 192), 0px 1px 0 rgb(71 164 172), 0px 2px 0 rgb(51 144 152), 0px 3px 0 rgb(31 124 132), 0px 4px 0 rgb(11 104 112), 0px 5px 0 rgb(0 84 92), 0px 6px 0 rgb(0 64 72), 0px 7px 0 rgb(0 44 52), 0px 8px 7px rgb(0 0 0 / 60%), 0px 8px 1px rgb(0 0 0 / 50%), 0px 0px 7px rgb(0 0 0 / 20%);
+    transition: box-shadow 0.2s, transform 0.2s;
+    padding: 0;
+    outline: none;
+
+    /* .nav-buttons button */
+    transform: translateY(-4px);
+}
+form.formWrapper input[type=submit]:hover {
+    /* button:hover */
+    box-shadow: 0px 0px 0 rgb(161 0 0), 0px 1px 0 rgb(71 164 172), 0px 2px 0 rgb(11 104 112), 0px 3px 0 rgb(0 44 52), 0px 4px 3px rgb(0 0 0 / 60%), 0px 4px 1px rgb(0 0 0 / 50%), 0px 0px 3px rgb(0 0 0 / 20%);
+    transform: translateY(4px);
+}
+form.formWrapper > .errorMessage:last-child {
+    margin-bottom: 0;
+    margin-top: 6px;
+}
+form.formWrapper p {
+    margin: 0;
+    text-align: center;
+}
 /* Form End */

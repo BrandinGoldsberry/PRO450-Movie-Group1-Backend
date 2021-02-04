@@ -50,83 +50,37 @@ const initlogin = () => {
 }
 
 const signup = (captchaToken, formData) => {
-    let fail = false;
-    console.log(formData);
-    let fname = formData[0].value;
-    let lname = formData[1].value;
-    let email = formData[2].value;
-    let state = formData[3].value;
-    let street = formData[4].value;
-    let city = formData[5].value;
-    let zipcode = formData[6].value;
-    let phone = formData[7].value;
-    let password = formData[8].value;
+    let signupError = document.getElementById("signupError");
+    signupError.innerText = "";
 
-    let errorMsg = document.getElementById("signupError");
-
-    if(!fname) {
-        errorMsg.innerText = "Please enter a valid name";
-        fail = true;
-    } else if(!lname) {
-        errorMsg.innerText = "Please enter a valid name";
-        fail = true;
-    } else if(!email) {
-        errorMsg.innerText = "Please enter a valid email";
-        fail = true;
-    } else if(!state) {
-        errorMsg.innerText = "Please enter a valid state";
-        fail = true;
-    } else if(!street) {
-        errorMsg.innerText = "Please enter a valid Street";
-        fail = true;
-    } else if(!city) {
-        errorMsg.innerText = "Please enter a valid city";
-        fail = true;
-    } else if(!zipcode) {
-        errorMsg.innerText = "Please enter a valid zip code";
-        fail = true;
-    } else if(!phone) {
-        errorMsg.innerText = "Please enter a valid phone number";
-        fail = true;
-    } else if(!password) {
-        errorMsg.innerText = "Please enter a valid password";
-        fail = true;
-    } else {
-        errorMsg.innerText = "";
-        axios.post(
-            "http://localhost:5001/users/sign-up",
-            {
-                fname,
-                lname,
-                password,
-                username: `${fname}${lname.charAt(0)}`,
-                street,
-                city,
-                state,
-                zipcode,
-                email,
-                phone,
-                captchaToken
-            }
-        ).then(res => {
-            Cookies.set("username", res.data.user.username);
-            Cookies.set("admin", res.data.user.admin);
-            Cookies.set("id", res.data.user.id);
-            Cookies.set("superadmin", res.data.user.superAdmin);
-            Cookies.set("email", res.data.user.email);
+    axios.post("http://localhost:5001/users/sign-up", {
+        fname: formData[0].value,
+        lname: formData[1].value,
+        email: formData[2].value,
+        state: formData[3].value,
+        street: formData[4].value,
+        city: formData[5].value,
+        zip_code: formData[6].value,
+        phone: formData[7].value,
+        password: formData[8].value,
+        username: `${formData[0].value.toLowerCase()}${formData[1].value.charAt(0).toLowerCase()}`,
+        captchaToken
+    }).then(res => {
+        // console.log(res.data);
+        if (res.data.success) {
+            Cookies.set("username", res.data.message.username);
+            Cookies.set("admin", res.data.message.admin);
+            Cookies.set("id", res.data.message.id);
+            Cookies.set("superadmin", res.data.message.superAdmin);
+            Cookies.set("email", res.data.message.email);
             location.assign("/");
-        }).catch(
-            (err) => {
-                console.log(err.response.data);
-                errorMsg.innerText = err.response.data;
-                grecaptcha.reset();
-            }
-        )
-    }
-    console.log(fail);
-    if(fail) {
-        grecaptcha.reset();
-    }
+        } else {
+            console.log(signupError);
+            console.log(res.data.message);
+            grecaptcha.reset();
+            signupError.innerText = res.data.message;
+        }
+    });
 }
 
 const assignEventListener = async (message, elem, regex, errorId, validateImmediately = false) => {
