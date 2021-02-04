@@ -91,7 +91,7 @@ const toggleReviews = (element) => {
         element.children[0].className = "new-review hide-show hide";
         setTimeout(() => {element.children[0].className = "new-review hide-show disabled hide";}, 505)
     } else {
-        element.children[0].className = "new-review hide-show show";
+        element.children[0].className = "new-review disabled hide-show show";
     }
     element.dataset.open = !isOpen;
 }
