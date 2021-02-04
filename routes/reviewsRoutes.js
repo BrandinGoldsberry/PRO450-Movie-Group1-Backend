@@ -81,7 +81,7 @@ ReviewRouter.put("/update-review", jsonParser, (req, res) => {
 //Delete Review
 ReviewRouter.delete("/delete-review", jsonParser, (req, res) => {
     var reviewId = req.query.reviewId;
-    // console.log(req.query);
+    console.log(reviewId);
     connectToMongo(() => {
         Review.deleteOne({_id: reviewId}).exec((err, review) => {
             if (err) console.log(err);
@@ -122,13 +122,15 @@ ReviewRouter.get("/reviews-by-movie", (req, res) => {
 
 ReviewRouter.get("/get-reviews-by-user", (req, res) => {
     var userId = req.query.userId;
+    // console.log(userId)
     connectToMongo(() => {
         Review.find({userId}).exec((err, result) => {
+            // console.log(result)
             if (err) console.log(err);
-            if(result !== null && result !== undefined && result.length !== 0) {
+            if(result && result.length !== 0) {
                 res.status(200).json({"result": result})
             }else{
-                {result}
+                res.status(200).send("There are no reviews by this user!")
             }
         })
     })

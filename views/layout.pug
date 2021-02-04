@@ -26,7 +26,14 @@ html
                     option(value="Actor") Actor
                     option(value="Genre") Genre
 
-                button#adminButton.disabled DashBoard
+                if user && user.admin
+                    button
+                        p Admin Dashboard
+                if user
+                    button
+                        p #{user.username}
+
+                button#adminButton.disabled Admin Dashboard
                 button#userPageButton.disabled
                 button#logOutButton.disabled Log Out
 

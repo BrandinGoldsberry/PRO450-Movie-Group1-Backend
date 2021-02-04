@@ -160,4 +160,8 @@ FrontEndRouter.get('/edit', (req, res) => {
     res.render('edit');
 });
 
+FrontEndRouter.get("/admin", (req, res) => {
+    res.render("admin", {});  
+})
+
 module.exports = FrontEndRouter;

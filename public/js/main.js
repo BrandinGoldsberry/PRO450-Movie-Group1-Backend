@@ -2,6 +2,8 @@ import {stars} from './stars.js';
 import {movieService} from './movieService.js';
 import {userService} from './userService.js'
 import {passwordService} from './passwordService.js'
+import { adminDashboard } from './adminDashboardService.js'
+
 
 const initHeaderButtons = () => {
     let logIn = document.getElementById("loginButton");
@@ -20,10 +22,10 @@ const initHeaderButtons = () => {
 
 const validateLogIn = () => {
     return Cookies.get("username") &&
-    Cookies.get("admin") &&
-    Cookies.get("id") &&
-    Cookies.get("superadmin") &&
-    Cookies.get("email");
+        Cookies.get("admin") &&
+        Cookies.get("id") &&
+        Cookies.get("superadmin") &&
+        Cookies.get("email");
 }
 
 const logOut = () => {
@@ -35,6 +37,12 @@ const logOut = () => {
     location.replace("/");
 }
 
+const enableAdminDashboard = () => {
+    let searchButton = document.getElementById("adminDashboard-search-submit")
+    searchButton.addEventListener("click", () => {adminDashboard.search()})
+    console.log("Admin")
+}
+
 const enableAccountButtons = () => {
     let adminButton = document.getElementById("adminButton");
     let userPageButton = document.getElementById("userPageButton");
@@ -42,6 +50,7 @@ const enableAccountButtons = () => {
 
     if(Cookies.get("admin") === "true") {
         adminButton.className = "";
+        adminButton.addEventListener("click", () => {location.replace("/admin")});
     }
     userPageButton.className = "";
     userPageButton.innerText = Cookies.get("username");
@@ -63,6 +72,7 @@ window.onload = (e) => {
     movieService.initializeNewReviews();
     document.getElementById("movieSubmit").addEventListener("click", movieService.search);
     document.getElementById("searchTypeSelect").addEventListener("change", movieService.updateSearchType);
+
     if (location.href.indexOf("login") > -1) {
         userService.initlogin();
     }
@@ -75,7 +85,11 @@ window.onload = (e) => {
     if (location.href.indexOf('reset-pass') > -1) {
         passwordService.initResetPass();
     }
+    if (location.href.indexOf("admin") > -1) {
+        enableAdminDashboard();
+    }
     if(validateLogIn()) {
         enableAccountButtons();
     }
+    
 }

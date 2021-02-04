@@ -1,0 +1,25 @@
+extends layout.pug
+
+block content
+    #adminDashboard
+    div#searchBar
+        input#adminDashboard-search-input(placeholder="Search User")
+        select#adminDashboard-search-select(name="search-type")
+            option(value="username") Username
+            option(value="fname") First name
+            option(value="lname") Last name
+            option(value="email") Email
+        button#adminDashboard-search-submit Search
+
+    table#adminTable
+        thead#adminTable-header
+            th.adminTable-header-text#adminTable-header-text-username Username
+            th.adminTable-header-text#adminTable-header-text-fname First Name
+            th.adminTable-header-text#adminTable-header-text-lname Last Name
+            th.adminTable-header-text#adminTable-header-text-email Email
+        tbody#adminTable-body
+
+    div#adminDashboard-review-div
+        
+    
+        

@@ -37,12 +37,29 @@ UserRouter.post("/get-user-by-email", (req, res) => {
 //Insecure? Yes? Does it matter? No
 UserRouter.post("/get-user-by-id", (req, res) => {
     connectToMongo(() => {
+        console.log(req.query.userId)
         User.findOne({ _id: req.query.userId }).exec((err, user) => {
             if (err) console.log(err);
             else if (user === null) {
-                res.status(400).json({ "error": "User not found!" });
+                res.status(400).json({"Error": "User not found!"});
             } else {
                 res.status(200).json({ "user": user });
+            }
+        });
+    })
+})
+
+UserRouter.post("/is-user-admin", (req, res) => {
+    connectToMongo(() => {
+        User.findOne({ _id: req.query.userId }).exec((err, user) => {
+            if (err) console.log(err);
+            else if (user === null) {
+                res.status(400).json({"Error": "User not found!"});
+            } else {
+                res.status(200).json({
+                    admin: user.admin,
+                    superAdmin: user.superAdmin
+                });
             }
         });
     })
@@ -287,10 +304,51 @@ UserRouter.delete('/delete-user', jsonParser, (req, res) => {
 
 UserRouter.get('/find-users-by-username', (req, res) => {
     let searchQuery = new RegExp("^" + req.query.search, 'i');
-    console.log(searchQuery);
     connectToMongo(() => {
         //You can use strings to explicitly exclude data
         User.find({username: searchQuery}, "-_hashed_password").exec((err, users) => {
+            if (err) console.log(err);
+            else {
+                //I'm just sending it all
+                res.status(200).json({"users": users})
+            }
+        })
+    })
+})
+
+UserRouter.get('/find-users-by-fname', (req, res) => {
+    let searchQuery = new RegExp("^" + req.query.search, 'i');
+    connectToMongo(() => {
+        //You can use strings to explicitly exclude data
+        User.find({fname: searchQuery}, "-_hashed_password").exec((err, users) => {
+            if (err) console.log(err);
+            else {
+                //I'm just sending it all
+                res.status(200).json({"users": users})
+            }
+        })
+    })
+})
+
+UserRouter.get('/find-users-by-lname', (req, res) => {
+    let searchQuery = new RegExp("^" + req.query.search, 'i');
+    connectToMongo(() => {
+        //You can use strings to explicitly exclude data
+        User.find({lname: searchQuery}, "-_hashed_password").exec((err, users) => {
+            if (err) console.log(err);
+            else {
+                //I'm just sending it all
+                res.status(200).json({"users": users})
+            }
+        })
+    })
+})
+
+UserRouter.get('/find-users-by-email', (req, res) => {
+    let searchQuery = new RegExp("^" + req.query.search, 'i');
+    connectToMongo(() => {
+        //You can use strings to explicitly exclude data
+        User.find({email: searchQuery}, "-_hashed_password").exec((err, users) => {
             if (err) console.log(err);
             else {
                 //I'm just sending it all
