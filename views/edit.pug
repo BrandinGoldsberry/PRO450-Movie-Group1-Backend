@@ -3,35 +3,27 @@ extends layout
 block content
     form.formWrapper#editAccountForm
         h2 Edit Account
-        span.errorMessage#editAccountError
-        br
 
         label(for="fName") First Name: 
         input#fName.inputBox(
             required
             type="text"
             name="fName")
-
         span.errorMessage#fnameError
-        br
 
         label(for="lName") Last Name: 
         input#lName.inputBox(
             type="text"
             required
             name="lName")
-
         span.errorMessage#lnameError
-        br
 
         label(for="username") Username: 
         input#username.inputBox(
             type="text"
             required
             name="username")
-
         span.errorMessage#usernameError
-        br
 
         label(for="email") Email: 
         input#email.inputBox(
@@ -39,18 +31,14 @@ block content
             type="email"
             name="email"
             className="inputBox")
-
         span.errorMessage#emailError
-        br
 
         label(for="state") State: 
         input#state.inputBox(
             required
             type="text"
             name="state")
-
         span.errorMessage#stateError
-        br
 
         label(for="street") Street: 
         input#street.inputBox(
@@ -59,7 +47,6 @@ block content
             name="street")
 
         span.errorMessage#streetError
-        br
 
         label(for="city") City: 
         input#city.inputBox(
@@ -67,7 +54,6 @@ block content
             type="text"
             name="city")
         span.errorMessage#cityError
-        br
 
         label(for="zipCode") Zip Code: 
         input#zipCode.inputBox(
@@ -75,13 +61,12 @@ block content
             type="text"
             name="zipCode")
         span.errorMessage#zipcodeError
-        br
 
         label(for="phone") Phone Number: 
         input#phone.inputBox(
             type="text"
             name="phone")
         span.errorMessage#phoneError
-        br
 
         input.inputButton(type="submit" value="Save Changes")
+        span.errorMessage#editAccountError

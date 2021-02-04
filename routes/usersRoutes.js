@@ -127,6 +127,9 @@ UserRouter.post("/sign-up", jsonParser, async (req, res) => {
     const captchaToken = req.body.captchaToken;
     const secret = "6LfU2zoaAAAAAHTZiEPfqbuOO44rWeaxDoOpR_AM";
 
+    const response = (message, success = false) => {
+        return {message, success}
+    }
 
     const results = await axios.post(`https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${captchaToken}`)
         .catch(error => {
@@ -136,22 +139,33 @@ UserRouter.post("/sign-up", jsonParser, async (req, res) => {
     var isHuman = results.data.success;
 
     if (isHuman) {
-        if (!req.body.fname, !req.body.lname, !req.body.street, !req.body.city, !req.body.state, !req.body.state, !req.body.zip_code, !req.body.email, !req.body.email, !req.body.phone, !req.body.password) {
-            return res.status(400).send("Not all fields have been filled out.");
-        }
+        // if (!req.body.fname, !req.body.lname, !req.body.street, !req.body.city, !req.body.state, !req.body.zip_code, !req.body.email, !req.body.phone, !req.body.password) {
+        //     return res.status(200).json(response("Not all fields have been filled out."));
+        // }
 
-        if (!req.body.username) {
-            return res.status(500).send("Username is invalid.");
-        }
+        // if (!req.body.username) {
+        //     return res.status(200).json(response("Username is invalid."));
+        // }
 
-        if (!(req.body.email).match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
-            // console.log("Email must follow the correct format. example@email.com");
-            return res.status(400).send("Email must follow the correct format. example@email.com");
-        }
+        // if (!(req.body.email).match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
+        //     // console.log("Email must follow the correct format. example@email.com");
+        //     return res.status(200).json(response("Email must follow the correct format. example@email.com"));
+        // }
 
-        if ((req.body.password).length < 6) {
-            return res.status(400).send("Password needs to be at least 6 characters long.");
-        }
+        // if ((req.body.password).length < 6) {
+        //     return res.status(200).json(response("Password needs to be at least 6 characters long."));
+        // }
+
+        if (!/[A-Za-z]+/i.test(req.body.fname)) return res.status(200).json(response('Please enter valid first name'));
+        if (!/[A-Za-z]+/i.test(req.body.lname)) return res.status(200).json(response('Please enter valid last name'));
+        if (!/[!$%^&*(){}<>?\/A-Za-z0-9]{6,}/i.test(req.body.password)) return res.status(200).json(response('Please enter valid password'));
+        if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(req.body.email)) return res.status(200).json(response('Please enter valid email'));
+        if (!/[A-Za-z]+/i.test(req.body.street)) return res.status(200).json(response('Please enter valid street'));
+        if (!/^(?:(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|P[AR]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY]))$/.test(req.body.state)) return res.status(200).json(response('Please enter valid state'));
+        if (!/[A-Za-z]+/i.test(req.body.city)) return res.status(200).json(response('Please enter valid city'));
+        if (!/^\d{5}(?:[-\s]\d{4})?$/i.test(req.body.zip_code)) return res.status(200).json(response('Please enter valid zipcode'));
+        if (!/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/i.test(req.body.phone)) return res.status(200).json(response('Please enter valid phone'));
+
 
         var newUser = {
             fname: req.body.fname,
@@ -172,19 +186,19 @@ UserRouter.post("/sign-up", jsonParser, async (req, res) => {
                 if (userCount == 0) {
                     User.findOne({ email: newUser.email }).exec((err, user) => {
                         if (user != null) {
-                            res.status(400).json({ "error": "Email in Use!" });
+                            res.status(200).json(response("Email is taken!"));
                         } else {
                             userToAdd = new User(newUser);
                             userToAdd.save((err) => {
                                 if (err) console.log(err);
                                 else {
-                                    res.status(200).json({ "user": userToAdd });
+                                    res.status(200).json(response(userToAdd, true));
                                 }
                             })
                         }
                     })
                 } else {
-                    return res.status(400).send("Email has been used before.");
+                    return res.status(200).json(response("Email has been used before."));
                 }
             });
         })
