@@ -1,20 +1,53 @@
+const validationEvent = evt => {
+    let password = document.getElementById('password').value;
+    let confirm = document.getElementById('confirm').value;
+
+    // Password
+    let passError = document.getElementById('passError');
+    if (!/[!$%^&*(){}<>?\/A-Za-z0-9]{6,}/i.test(password)) {
+        passError.innerText = 'Password must be 6 characters, minimum allowed characters: !$%^&*(){}<>?/A-Za-z0-9';
+        passError.className = 'errorMessage';
+    } else {
+        passError.innerText = '✓';
+        passError.className = 'validMessage';
+    }
+
+    // Confirm Password
+    let confirmError = document.getElementById('confirmError');
+    if (password !== confirm) {
+        confirmError.innerText = 'Passwords do not match';
+        confirmError.className = 'errorMessage';
+    } else {
+        confirmError.innerText = '✓';
+        confirmError.className = 'validMessage';
+    }
+}
+
 const resetPassword = (token, password, confirm) => {
-    // TODO remove and replace with assignEventListener calls
-    console.log(password, password.length, password.length < 6);
+    let errorMsg = document.getElementById("resetPassError");
     if (password.length >= 6) {
         if (password === confirm) {
+            errorMsg.innerText = '';
             axios.put('http://localhost:5001/users/update-password', {
                 token,
                 password
             }).then(res => {
-                if (res) console.log('Password was successfully updated!');
-                else console.log('Could not reset password');
+                if (res) alert('Password was successfully updated!');
+                else errorMsg.innerText = 'Could not reset password';
             });
-        } else console.log('Passwords do not match');
-    } else console.log('Password must be at least 6 characters');
+        } else errorMsg.innerText = 'Passwords do not match';
+    } else errorMsg.innerText = 'Password must be at least 6 characters';
+}
+
+const initResetPassValidation = () => {
+    let password = document.getElementById('password');
+    let confirm = document.getElementById('confirm');
+    password.addEventListener('keyup', validationEvent);
+    confirm.addEventListener('keyup', validationEvent);
 }
 
 const initResetPass = () => {
+    initResetPassValidation();
     const resetPassForm = document.getElementById('resetPassForm');
     resetPassForm.addEventListener('submit', evt => {
         evt.preventDefault();

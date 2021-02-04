@@ -3,6 +3,7 @@ extends layout.pug
 block content
     form.formWrapper#resetPassForm
         h2 Reset password
+        span.errorMessage#resetPassError
 
         input#token.inputBox(
             type="hidden"
@@ -16,17 +17,15 @@ block content
         input#password.inputBox(
             required
             type="password"
-            name="password"
-        )
-
+            name="password")
+        span.errorMessage#passError
         br
 
         label(for="confirm") Confirm:
         input#confirm.inputBox(
             required
             type="password"
-            name="confirm"
-        )
-
+            name="confirm")
+        span.errorMessage#confirmError
         br
         input.inputButton#resetPass(type="submit" value="Reset Password")

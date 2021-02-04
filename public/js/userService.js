@@ -87,6 +87,7 @@ const signup = (captchaToken, formData) => {
         errorMsg.innerText = "Please enter a valid password";
         fail = true;
     } else {
+        errorMsg.innerText = "";
         axios.post(
             "http://localhost:5001/users/sign-up",
             {
@@ -123,10 +124,9 @@ const signup = (captchaToken, formData) => {
     }
 }
 
-const assignEventListener = async (message, elem, regex, errorId) => {
-    console.log(elem);
-    elem.addEventListener('keyup', (e) => {
-        let val = e.target.value;
+const assignEventListener = async (message, elem, regex, errorId, somethingNormal = false) => {
+    elem.addEventListener('keyup', evt => {
+        let val = evt.target.value;
         let success = regex.test(val);
         let err = document.getElementById(errorId);
         if(!success) {
@@ -136,7 +136,12 @@ const assignEventListener = async (message, elem, regex, errorId) => {
             err.innerText = "✓";
             err.className = "validMessage";
         }
-    })
+    });
+    if (somethingNormal) {
+        const event = document.createEvent('Event');
+        event.initEvent('keyup', true, true);
+        elem.dispatchEvent(event);
+    }
 }
 
 const initSignupValidation = async () => {
@@ -175,16 +180,41 @@ const initSignup = () => {
 }
 
 const editAccount = userData => {
+    let errorMsg = document.getElementById("editAccountError");
+    errorMsg.innerText = "";
+    console.log(userData);
     axios.put('http://localhost:5001/users/update-user', userData)
     .then(res => {
-        if (res.data.success) console.log('Account was successfully updated!');
-        else console.log('Could not edit account');
+        if (res.data.success) alert(res.data.message);
+        else errorMsg.innerText = res.data.message;
     });
+}
+
+const initEditAccountValidation = () => {
+    let fname = document.getElementById("fName");
+    let lname = document.getElementById("lName");
+    let username = document.getElementById("username");
+    let email = document.getElementById("email");
+    let state = document.getElementById("state");
+    let street = document.getElementById("street");
+    let city = document.getElementById("city");
+    let zipcode = document.getElementById("zipCode");
+    let phone = document.getElementById("phone");
+
+    assignEventListener("Please enter valid first name", fname, /[A-Za-z]+/i, "fnameError", true);
+    assignEventListener("Please enter valid last name", lname, /[A-Za-z]+/i, "lnameError", true);
+    assignEventListener("Please enter valid username", username, /[A-Za-z]{5,}/i, "usernameError", true);
+    assignEventListener("Please enter valid email", email, /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i, "emailError", true);
+    assignEventListener("Please enter valid street", street, /[A-Za-z]+/i, "streetError", true);
+    assignEventListener("Please enter valid state", state, /^(?:(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|P[AR]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY]))$/, "stateError", true);
+    assignEventListener("Please enter valid city", city, /[A-Za-z]+/i, "cityError", true);
+    assignEventListener("Please enter valid zipcode", zipcode, /^\d{5}(?:[-\s]\d{4})?$/i, "zipcodeError", true);
+    assignEventListener("Please enter valid phone", phone, /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/i, "phoneError", true);
 }
 
 const initEditAccount = async () => {
     const userId = Cookies.get('id');
-    console.log(userId);
+    // console.log(userId);
     if (userId) {
         await axios.post(`http://localhost:5001/users/get-user-by-id?userId=${userId}`)
         .then(res => {
@@ -199,6 +229,7 @@ const initEditAccount = async () => {
                 document.getElementById('state').value = res.data.user.state;
                 document.getElementById('zipCode').value = res.data.user.zip_code;
                 document.getElementById('phone').value = res.data.user.phone;
+                initEditAccountValidation();
             }
         });
     } else location.replace('/');
