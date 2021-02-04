@@ -78,13 +78,13 @@ const movie_genres = [{
 const toggleReviews = (element) => {
     let isOpen = element.dataset.open == "true";
     if(!isOpen) {
-        let height = element.dataset.hideheight;
+        let pHeight = element.scrollHeight > 300 ? 400 : element.scrollHeight;
+        console.log(pHeight);
         element.style.transform = `translateY(0px)`;
-        let pHeight = element.scrollHeight;
-        element.parentElement.style.height = `${pHeight + 100}px`;
+        element.parentElement.style.height = `${pHeight}px`;
     } else {
-        let height = element.scrollHeight * -1;
-        element.style.transform = `translateY(${height}px)`;
+        let height = element.scrollHeight > 300 ? 400 : element.scrollHeight;
+        element.style.transform = `translateY(${height * -1}px)`;
         element.parentElement.style.height = '0px';
     }
     if(isOpen && Cookies.get("id")) {
@@ -364,7 +364,8 @@ const initializeNewReview = async (newReview) => {
             reviewList.append(reviewNode);
             let fullStars = starsDOM.dataset.ratingval;
             let halfStars = 0;
-            reviewList.parentElement.style.height = reviewList.scrollHeight + 100;
+            let maxheight = reviewList.scrollHeight > 300 ? 400 : reviewList.scrollHeight;
+            reviewList.parentElement.style.height = maxheight * -1;
 
             setStarValues(reviewStars, fullStars, halfStars);
         }).catch((err) => {

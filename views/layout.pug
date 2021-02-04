@@ -1,5 +1,6 @@
 html
     head
+        meta(content="width=device-width, initial-scale=1" name="viewport")
         title Movies n reviews
         link(rel="stylesheet", href="/css/style.css")
         link(rel="stylesheet" href="/css/all.min.css")
@@ -9,26 +10,27 @@ html
         script(src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js")
         script(src="https://unpkg.com/axios/dist/axios.min.js")
     body
-        header#header
-            a#navBarTitle(href="/")
+        header.header
+            a.nav-bar-title(href="/")
                 h1 Movies n reviews
-            div#navButtons
+            div.nav-buttons
                 select#genreSelect.disabled(name="genres")
                     if genreList
                         each genre in genreList
                             option(value=`${genre.id}`) #{genre.name}
-                input#movieQueryInput(placeholder="Search Movie by Title" name="search")
-                button#movieSubmit Search
+                input#movieQueryInput.search-bar(placeholder="Search Movie by Title" name="search")
                 
-
                 select#searchTypeSelect(name="searchType")
                     option(default value="Title") Title
                     option(value="Actor") Actor
                     option(value="Genre") Genre
+                button#movieSubmit.search-button 
+                    i.fas.fa-search
 
                 button#adminButton.disabled DashBoard
                 button#userPageButton.disabled
-                button#logOutButton.disabled Log Out
+                button#logOutButton.disabled
+                    i.fas.fa-sign-out-alt
 
                 button#loginButton Login
                 button#signUpButton Sign Up

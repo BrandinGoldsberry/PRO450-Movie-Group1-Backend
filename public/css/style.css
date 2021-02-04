@@ -75,8 +75,8 @@ button {
     display: inline-block;
     margin: 5px;
     text-decoration: none;
-    background-color: rgb(91, 184, 212) !important;
-    border: rgb(91, 184, 212) solid 3px !important;
+    background-color: rgb(91, 184, 212);
+    border: rgb(91, 184, 212) solid 3px;
     color: white;
     box-shadow: 0px 0px 0 rgb(91, 184, 192),
                 0px 1px 0 rgb(71,164,172),
@@ -91,6 +91,7 @@ button {
                 0px 0px 7px rgba(0,0,0,.2);
     transition: box-shadow 0.2s, transform 0.2s;
     padding: 0;
+    outline: none;
 }
 
 button:hover {
@@ -109,17 +110,17 @@ p {
 }
 
 /* Header */
-#header {
+.header {
     display: flex;
     background-color: rgb(240, 240, 240);
     align-items: center;
-    justify-content: flex-end;
     height: 4.8vh;
     border-bottom: rgb(221, 221, 221) solid 1.5px;
     margin-bottom: 10px;
+    justify-content: space-evenly;
 }
 
-#navButtons {
+.nav-buttons {
     display: flex;
     align-items: center;
     justify-items: flex-end;
@@ -128,28 +129,31 @@ p {
     align-content: space-around;
 }
 
-#navButtons button {
-    height: 70%;
-    overflow: hidden;
-    white-space: nowrap;
-    padding: 0;
+.nav-buttons button {
+    font-size: 1.5vh;
+    transform: translateY(-4px);
 }
 
-#navButtons button:hover {
-    background-color: rgb(224, 224, 224);
+.nav-buttons button:hover {
+    transform: translateY(2px);
 }
 
-#navBarTitle {
+.nav-buttons input, select {
+    font-size: 2vh;
+}
+
+.nav-bar-title {
     text-decoration: none;
     color: unset;
     margin-left: 5px;
     font-family: 'Roboto Slab';
-    font-size: 1rem;
+    font-size: 1.5vh;
     font-weight: bold;
-    justify-self: left;
+    justify-content: flex-start;
+    justify-self: flex-start;
 }
 
-#movieContainer {
+.movie-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -157,6 +161,14 @@ p {
     width: 80%;
     margin-left: auto;
     margin-right: auto;
+}
+
+.search-button i::before {
+    font-size: 2vh;
+}
+
+.search-bar {
+    margin: 0px 5px;
 }
 
 .hide-show {
@@ -196,12 +208,24 @@ p {
     margin-top: 50px;
 }
 
+@media screen and (max-width: 768px) {
+    .movie-card {
+        width: 25%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .movie-card {
+        width: 100%;
+    }
+}
+
 .movie-card  p{
     display: block;
 }
 
 .movie-description {
-    height: 50px;
+    /* height: 50px; */
     display: block;
 }
 
@@ -243,7 +267,8 @@ p {
 }
 
 .reviews-mask {
-    overflow: hidden;
+    overflow: scroll;
+    overflow-x: hidden;
 }
 
 .reviews-list {

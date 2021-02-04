@@ -1,7 +1,7 @@
 extends layout.pug
 
 block content
-    #movieContainer
+    .movie-container
         if MovieList 
             each movie in MovieList
                 .movie-card(data-movieid=movie.id)
