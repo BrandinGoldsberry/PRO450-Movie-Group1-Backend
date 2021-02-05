@@ -563,3 +563,8 @@ form.formWrapper p {
     text-align: center;
 }
 /* Form End */
+
+.reviews-mask {
+    max-height: 500px;
+    overflow-x: scroll;
+}
