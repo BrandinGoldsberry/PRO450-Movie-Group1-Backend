@@ -358,13 +358,6 @@ p {
     display: none;
 }
 
-a#navBarTitle h1 {
-    white-space: nowrap;
-}
-div#navButtons {
-    width: 100%;
-}
-
 span.nav-splitter {
     width: 100%;
 }
@@ -425,7 +418,7 @@ tr:hover {
 
 .movie-information-wrapper {
     display: flex;
-    width: 50% !important;
+    width: 50%;
     flex-direction: column;
     width: fit-content;
     margin: 1rem;
@@ -456,10 +449,10 @@ tr:hover {
         flex-direction: column;
     }
     
-    .movie-overview {
-        width: fit-content;
+    .movie-page-container > * {
+        width: 100%;
     }
-  }
+}
 
 .errorMessage {
     color: red;

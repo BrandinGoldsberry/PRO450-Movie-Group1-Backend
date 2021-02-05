@@ -79,20 +79,23 @@ const toggleReviews = (element) => {
     let isOpen = element.dataset.open == "true";
     if(!isOpen) {
         let pHeight = element.scrollHeight > 300 ? 400 : element.scrollHeight;
-        console.log(pHeight);
         element.style.transform = `translateY(0px)`;
         element.parentElement.style.height = `${pHeight}px`;
+        element.dataset.open = "true";
     } else {
         let height = element.scrollHeight > 300 ? 400 : element.scrollHeight;
         element.style.transform = `translateY(${height * -1}px)`;
         element.parentElement.style.height = '0px';
+        element.dataset.open = "false";
     }
     if(Cookies.get("id")) {
         if(isOpen) {
             element.children[0].className = "new-review hide-show hide";
             setTimeout(() => {element.children[0].className = "new-review hide-show disabled hide";}, 505)
+            element.dataset.open = "false";
         } else {
             element.children[0].className = "new-review hide-show show";
+            element.dataset.open = "true"
         }
     } else {
         element.children[0].className = "new-review disabled hide-show show";
@@ -420,7 +423,10 @@ const initializeNewReviews = async () => {
         let newReviews = document.getElementsByClassName("new-review");
         for (const newReview of newReviews) {
             newReview.className = "new-review";
-            newReview.parentElement.parentElement.className = "reviews-mask disable-scroll"
+            // newReview.parentElement.parentElement.className = "reviews-mask disable-scroll"
+            if(location.href.indexOf("movie") > -1) {
+                newReview.parentElement.parentElement.className = "reviews-mask disable-scroll"
+            }
             initializeNewReview(newReview);
         }
     }

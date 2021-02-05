@@ -7,8 +7,7 @@ block content
             a(href="/") Go Back Home
     else
         .movie-page-container
-            .movie-poster-single
-                img(src="https://image.tmdb.org/t/p/w300" + movie.poster_path)
+            img.movie-poster-single(src="https://image.tmdb.org/t/p/w300" + movie.poster_path)
             .movie-information-wrapper
                 .movie-name
                     h2 #{movie.title}
