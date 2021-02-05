@@ -387,16 +387,28 @@ tr:hover {
     background-color: rgb(131, 224, 252);
 }
 
-#dashboard {
+.admin-dashboard {
     display: flex;
     width: 80%;
     margin-left: auto;
     margin-right: auto;
     background-color: #EEE;
     min-height: 700px;
+    flex-direction: column;
 }
 
-#search-panel .table-wrapper {
+
+.right-panel {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+}
+
+.admin-table {
+    width: 100%;
+}
+
+.search-panel {
     max-height: 800px;
     overflow-y: scroll;
 }
