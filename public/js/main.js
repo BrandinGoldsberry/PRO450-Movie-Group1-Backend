@@ -1,16 +1,16 @@
-import {stars} from './stars.js';
-import {movieService} from './movieService.js';
-import {userService} from './userService.js'
-import {passwordService} from './passwordService.js'
+import { stars } from './stars.js';
+import { movieService } from './movieService.js';
+import { userService } from './userService.js'
+import { passwordService } from './passwordService.js'
 import { adminDashboard } from './adminDashboardService.js'
 
 
 const initHeaderButtons = () => {
-    let logIn = document.getElementById("loginButtonFloat");
+    let logIn = document.getElementById("loginButton");
     logIn.addEventListener("click", (e) => {
         location.assign("/login");
     })
-    let signUpButton = document.getElementById("signUpButtonFloat");
+    let signUpButton = document.getElementById("signUpButton");
     signUpButton.addEventListener("click", (e) => {
         location.assign("/signup");
     })
@@ -39,7 +39,7 @@ const logOut = () => {
 
 const enableAdminDashboard = () => {
     let searchButton = document.getElementById("adminDashboard-search-submit")
-    searchButton.addEventListener("click", () => {adminDashboard.search()})
+    searchButton.addEventListener("click", () => { adminDashboard.search() })
     console.log("Admin")
 }
 
@@ -48,9 +48,9 @@ const enableAccountButtons = () => {
     let userPageButton = document.getElementById("userPageButton");
     let logOutButton = document.getElementById("logOutButton");
 
-    if(Cookies.get("admin") === "true") {
+    if (Cookies.get("admin") === "true") {
         adminButton.className = "";
-        adminButton.addEventListener("click", () => {location.replace("/admin")});
+        adminButton.addEventListener("click", () => { location.replace("/admin") });
     }
     userPageButton.className = "";
     userPageButton.innerText = Cookies.get("username");
@@ -88,8 +88,8 @@ window.onload = (e) => {
     if (location.href.indexOf("admin") > -1) {
         enableAdminDashboard();
     }
-    if(validateLogIn()) {
+    if (validateLogIn()) {
         enableAccountButtons();
     }
-    
+
 }

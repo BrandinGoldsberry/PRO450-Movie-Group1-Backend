@@ -15,7 +15,7 @@ const search = async () => {
         for (const user in userList) {
             if (Object.hasOwnProperty.call(userList, user)) {
                 const element = userList[user];
-                
+
                 var newRow = tableAD.insertRow();
                 newRow.setAttribute("data-user-id", element["_id"])
                 newRow.setAttribute("data-user-username", element["username"])
@@ -51,16 +51,21 @@ const getUserInfo = async (e) => {
     const userId = element.getAttribute("data-user-id");
     var buttonDiv = document.getElementById("adminDashboard-button-div");
     var reviewDiv = document.getElementById("adminDashboard-review-div");
+    var continaingDiv = reviewDiv.parentElement
     const resUser = await axios.post(`http://localhost:5001/users/is-user-admin?userId=${userId}`);
     const user = resUser.data || undefined;
     const currentUserId = Cookies.get("id");
     const username = element.getAttribute("data-user-username");
 
-    // console.log(username);/
+    continaingDiv.setAttribute("data-user-username", username)
+    continaingDiv.setAttribute("data-user-id", userId)
+    continaingDiv.setAttribute("data-user-current-id", currentUserId)
+    continaingDiv.setAttribute("data-user-admin", String(user["admin"]));
+    continaingDiv.setAttribute("data-user-super-admin", String(user["superAdmin"]));
+
+    // console.log(username);
 
     // console.log(user)
-
-
 
     getUserButtons(user, userId, currentUserId, username);
 
@@ -139,6 +144,48 @@ const createElement = (elementType, className, idName, text, parentElement) => {
     parentElement.appendChild(element);
 }
 
+const getUserButtons = (user, userId, currentUserId, username) => {
+    console.log(user["admin"],user["superAdmin"] , userId, currentUserId, username);
+    var buttonDiv = document.getElementById("adminDashboard-button-div");
+    const isUserSuperAdmin = Boolean(Cookies.get("superadmin"));
+    // console.log(isUserSuperAdmin);
+    if (userId != currentUserId) {
+        console.log("Isn't Current User")
+        if (!user["superAdmin"] && user["admin"] || !user["superAdmin"] && !user["admin"]) {
+            console.log("Delete User")
+            var deleteUserButton = document.createElement("button");
+            deleteUserButton.className = "adminDashboard-card-delete-review-user";
+            deleteUserButton.innerHTML = "Delete User";
+            deleteUserButton.setAttribute("data-user-username", username);
+            deleteUserButton.setAttribute("data-user-id", currentUserId);
+            deleteUserButton.addEventListener("click", (e) => { deleteUserCheck(e) });
+            buttonDiv.appendChild(deleteUserButton);
+        }
+        if (isUserSuperAdmin) {
+            if (!user["superAdmin"] && user["admin"]) {
+                console.log("Remove Admin User")
+                var removeAdminButton = document.createElement("button");
+                removeAdminButton.className = "adminDashboard-card-remove-admin";
+                removeAdminButton.innerHTML = "Remove Admin Privileges";
+                removeAdminButton.setAttribute("data-user-username", username);
+                removeAdminButton.setAttribute("data-user-id", currentUserId);
+                removeAdminButton.addEventListener("click", (e) => { removeAdminCheck(e) });
+                buttonDiv.appendChild(removeAdminButton);
+            }
+            if (!user["superAdmin"] && !user["admin"]) {
+                console.log("Add Admin User")
+                var addAdminButton = document.createElement("button");
+                addAdminButton.className = "adminDashboard-card-add-admin";
+                addAdminButton.innerHTML = "Add Admin Privileges";
+                addAdminButton.setAttribute("data-user-username", username);
+                addAdminButton.setAttribute("data-user-id", currentUserId);
+                addAdminButton.addEventListener("click", (e) => { addAdminCheck(e) });
+                buttonDiv.appendChild(addAdminButton);
+            }
+        }
+    }
+}
+
 const cleanUp = () => {
     var adminTable = document.getElementById("adminTable");
     var adminTableRows = (adminTable.rows.length);
@@ -146,41 +193,6 @@ const cleanUp = () => {
     for (let i = 1; i < adminTableRows; i++) {
         ;
         adminTable.deleteRow(1);
-    }
-
-}
-
-const getUserButtons = (user, userId, currentUserId, username) => {
-    var buttonDiv = document.getElementById("adminDashboard-button-div");
-    const isUserSuperAdmin = Boolean(Cookies.get("superadmin"));
-    console.log(isUserSuperAdmin);
-    if (userId != currentUserId) {
-        if (!user["superAdmin"] && user["admin"] || !user["superAdmin"] && !user["admin"]) {
-            var deleteUserButton = document.createElement("button");
-            deleteUserButton.className = "adminDashboard-card-delete-review-user";
-            deleteUserButton.innerHTML = "Delete User";
-            deleteUserButton.setAttribute("data-user-username", username);
-            deleteUserButton.addEventListener("click", (e) => { deleteUserCheck(e) });
-            buttonDiv.appendChild(deleteUserButton);
-        }
-        if (isUserSuperAdmin) {
-            if (!user["superAdmin"] && user["admin"]) {
-                var removeAdminButton = document.createElement("button");
-                removeAdminButton.className = "adminDashboard-card-remove-admin";
-                removeAdminButton.innerHTML = "Remove Admin Privileges";
-                removeAdminButton.setAttribute("data-user-username", username);
-                removeAdminButton.addEventListener("click", (e) => { removeAdminCheck(e) });
-                buttonDiv.appendChild(removeAdminButton);
-            }
-            if (!user["superAdmin"] && !user["admin"]) {
-                var addAdminButton = document.createElement("button");
-                addAdminButton.className = "adminDashboard-card-remove-admin";
-                addAdminButton.innerHTML = "Add Admin Privileges";
-                addAdminButton.setAttribute("data-user-username", username);
-                addAdminButton.addEventListener("click", (e) => { addAdmin(e) });
-                buttonDiv.appendChild(addAdminButton);
-            }
-        }
     }
 }
 
@@ -196,6 +208,15 @@ const userCleanUp = () => {
     if (reviewDiv) {
         while (reviewDiv.firstChild) {
             reviewDiv.removeChild(reviewDiv.firstChild);
+        }
+    }
+}
+
+const buttonCleanUp = () => {
+    var buttonDiv = document.getElementById("adminDashboard-button-div") || null;
+    if (buttonDiv) {
+        while (buttonDiv.firstChild) {
+            buttonDiv.removeChild(buttonDiv.firstChild);
         }
     }
 }
@@ -231,50 +252,107 @@ const deleteReview = (e) => {
 }
 
 const deleteUserCheck = (e) => {
+    createConfSet(e, 1, "delete", "Are you sure you want to delete", null);
+}
+
+const deleteUser = (e) => {
     const element = e.target;
-    e.nodeTarget
+    const currentId = element.getAttribute("data-user-id")
+    // console.log(currentId)
 }
 
 const removeAdminCheck = (e) => {
+    createConfSet(e, 0, "remove", "Are you sure you want to remove", "admin privileges")
+}
+
+const removeAdmin = (e) => {
+    const element = e.target;
+    const currentId = element.getAttribute("data-user-id")
+    // console.log(currentId)
+}
+
+const addAdminCheck = (e) => {
+    createConfSet(e, 0, "add", "Are you sure you want to give", "admin privileges")
+}
+
+const addAdmin = async (e) => {
+    const element = e.target;
+    const parent = element.parentElement.parentElement;
+    const username = parent.getAttribute("data-user-username");
+    const id = parent.getAttribute("data-user-id");
+    const currentId = parent.getAttribute("data-user-current-id");
+    const admin = Boolean(parent.getAttribute("data-user-admin"));
+    const superAdmin = Boolean(parent.getAttribute("data-user-super-admin"));
+
+    console.log({superAdmin, admin});
+
+    console.log(currentId)
+    var addAdminRes = await axios.get(`http://localhost:5001/users/make-admin?userId=${id}`);
+    if(addAdminRes.status == 200){
+        console.log("Hello")
+        buttonCleanUp();
+        await getUserButtons({superAdmin: false, admin}, id, currentId, username);
+    }
+
+}
+
+
+
+const createConfSet = (e, otherItemIndex, action, headerMessage, headerMessageTwo) => {
     const element = e.target;
     const userUsername = element.getAttribute("data-user-username");
+    const currentUserId = element.getAttribute("data-user-id")
     const parent = element.parentElement;
-    const childDelete = parent.children.item(0);
+    const childButton = parent.children.item(otherItemIndex);
 
-    console.log(childDelete);
-
-    // console.log(element);
-
-    parent.removeChild(childDelete);
+    parent.removeChild(childButton);
     parent.removeChild(element);
 
     var confirmText = document.createElement("h2");
-    confirmText.className = "adminDashboard-card-remove-admin-text";
-    var userUsernameFormat = userUsername[-1] === 's' ? `${userUsername}'` : `${userUsername}'s`
-    confirmText.innerHTML = `Are you sure you want to remove ${userUsernameFormat} admin privileges?`;
-    confirmText.addEventListener("click", (e) => { removeAdmin(e) });
+    confirmText.className = `adminDashboard-card-${action}-admin-text`;
+    if (headerMessageTwo && action == "remove") {
+        var userUsernameFormat = userUsername[-1] === 's' ? `${userUsername}'` : `${userUsername}'s`
+        confirmText.innerHTML = `${headerMessage} <span class="adminDashboard-card-${action}-admin-span">${userUsernameFormat}</span> ${headerMessageTwo}?`;
+    } else if(!headerMessageTwo && action == "delete"){
+        confirmText.innerHTML = `${headerMessage} ${userUsername}?`;
+    } else if(headerMessageTwo && action == "add"){
+        confirmText.innerHTML = `${headerMessage} <span class="adminDashboard-card-${action}-admin-span">${userUsername}</span> ${headerMessageTwo}?`;
+
+    }
     parent.appendChild(confirmText);
 
     var confirmButton = document.createElement("button");
-    confirmButton.className = "adminDashboard-card-remove-admin-confirm";
+    confirmButton.className = `adminDashboard-card-${action}-admin-confirm`;
     confirmButton.innerHTML = "Confirm";
-    confirmButton.addEventListener("click", (e) => { removeAdmin(e) });
+    confirmButton.setAttribute("data-user-id", currentUserId)
+    if (action == "remove") {
+        confirmButton.addEventListener("click", (e) => { removeAdmin(e) });
+    } else if (action == "delete") {
+        confirmButton.addEventListener("click", (e) => { deleteUser(e) });
+    } else if (action == "add") {
+        console.log("add");
+        confirmButton.addEventListener("click", (e) => { addAdmin(e) });
+    }
     parent.appendChild(confirmButton);
 
 
     var cancelButton = document.createElement("button");
-    cancelButton.className = "adminDashboard-card-remove-admin-cancel";
+    cancelButton.className = `adminDashboard-card-${action}-admin-cancel`;
     cancelButton.innerHTML = "Cancel ";
     cancelButton.addEventListener("click", () => {
         parent.removeChild(confirmText);
         parent.removeChild(confirmButton);
         parent.removeChild(cancelButton);
-        parent.appendChild(childDelete);
-        parent.appendChild(element);
+        if (action == "delete") {
+            parent.appendChild(element);
+            parent.appendChild(childButton);
+        } else {
+            parent.appendChild(childButton);
+            parent.appendChild(element);
+        }
 
     });
     parent.appendChild(cancelButton);
-
 }
 
 export const adminDashboard = {
