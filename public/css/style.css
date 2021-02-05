@@ -373,6 +373,7 @@ em{
 th, td {
     border: 2px solid black;
     padding: 2px;
+    font-family: 'Markazi Text', sans-serif;
 }
 th {
     background-color: lightgray;
@@ -404,10 +405,6 @@ tr:hover {
     width: 50%;
 }
 
-.admin-table {
-    width: 100%;
-}
-
 .search-panel {
     max-height: 800px;
     overflow-y: scroll;
@@ -426,6 +423,7 @@ tr:hover {
 .movie-poster-single {
     width: fit-content;
     margin: 1rem;
+    max-height: 450px;
 }
 
 .movie-information-wrapper {
