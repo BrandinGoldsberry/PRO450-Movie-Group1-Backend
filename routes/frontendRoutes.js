@@ -164,4 +164,27 @@ FrontEndRouter.get("/admin", (req, res) => {
     res.render("admin", {});  
 })
 
+FrontEndRouter.get('/movie/:id', (req, res) => {
+    let id = req.params.id;
+    axios.get(
+        "https://api.themoviedb.org/3/movie/" + id + "?api_key=8fbd2bfef8820b20b271b1213852fe21&language=en-US"
+    ).then((response) => {
+          if(res.status_code === 34) {
+            res.render('movie', {movieNotFound: true});
+          } else {
+            axios.get(
+                `http://api.themoviedb.org/3/movie/${id}/release_dates?api_key=8fbd2bfef8820b20b271b1213852fe21&language=en-US`
+            ).then((mpraaRes) => {
+                let movieRating;
+                for (const mpraa of mpraaRes.data.results) {
+                    if(mpraa.iso_3166_1 === "US") {
+                        movieRating = mpraa.release_dates[0].certification;
+                    }
+                }
+                res.render('movie', {movie: response.data, movieMPRAA: movieRating});
+            })
+          }
+    })
+});
+
 module.exports = FrontEndRouter;

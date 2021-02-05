@@ -9,10 +9,7 @@ block content
         input#token.inputBox(
             type="hidden"
             name="token"
-            value="" + token + ""
-        )
-
-        br
+            value="" + token + "")
 
         label(for="password") Password:
         input#password.inputBox(
@@ -20,7 +17,7 @@ block content
             type="password"
             name="password")
         span.errorMessage#passError
-        br
+
 
         label(for="confirm") Confirm:
         input#confirm.inputBox(
@@ -28,5 +25,6 @@ block content
             type="password"
             name="confirm")
         span.errorMessage#confirmError
-        br
+        
         input.inputButton#resetPass(type="submit" value="Reset Password")
+        span.errorMessage#resetPassError

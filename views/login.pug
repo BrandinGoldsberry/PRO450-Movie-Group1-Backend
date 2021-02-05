@@ -3,32 +3,23 @@ extends layout.pug
 block content
     form.formWrapper#logInForm
         h2 Log In
-        span.errorMessage#loginError
-        br
+
 
         label(for="loginUsername") Username:
         input.inputBox#loginUsername(
             required
             type="text"
-            name="username"
-        )
-
-        br
+            name="username")
 
         label(for="password") Password:
         input#loginPassword.inputBox(
             required
             type="password"
             name="password"
-            className="inputBox"
-        )
-
-        br
+            className="inputBox")
+        
         input.inputButton#loginSubmit(type="submit" name="Log In")
-
-        br
-        if loginError
-            span.errorMessage#loginError #{loginError}
+        span.errorMessage#loginError
 
     form.formWrapper#resetPassForm
         h2 Forgot password?
@@ -38,12 +29,7 @@ block content
         label(for="email") Email:
         input#email.inputBox(
             type="text"
-            name="email"
-        )
+            name="email")
 
-        br
         input.inputButton#resetPass(type="submit" value="Reset Password")
-
-        br
-        if resetError
-            span.errorMessage#loginError #{resetError}
+        span.errorMessage#resetPassError

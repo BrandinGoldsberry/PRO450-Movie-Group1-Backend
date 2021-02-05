@@ -7,15 +7,29 @@ import { adminDashboard } from './adminDashboardService.js'
 
 const initHeaderButtons = () => {
     let logIn = document.getElementById("loginButton");
+    let logInFloat = document.getElementById("loginButtonFloat");
     logIn.addEventListener("click", (e) => {
         location.assign("/login");
     })
+    logInFloat.addEventListener("click", (e) => {
+        location.assign("/login");
+    })
+
     let signUpButton = document.getElementById("signUpButton");
     signUpButton.addEventListener("click", (e) => {
         location.assign("/signup");
     })
+    let signUpButtonFloat = document.getElementById("signUpButtonFloat");
+    signUpButtonFloat.addEventListener("click", (e) => {
+        location.assign("/signup");
+    })
+
     let editAccountButton = document.getElementById("userPageButton");
     editAccountButton.addEventListener('click', evt => {
+        location.assign('/edit');
+    });
+    let editAccountButtonFloat = document.getElementById("userPageButtonFloat");
+    editAccountButtonFloat.addEventListener('click', evt => {
         location.assign('/edit');
     });
 }
@@ -47,21 +61,36 @@ const enableAccountButtons = () => {
     let adminButton = document.getElementById("adminButton");
     let userPageButton = document.getElementById("userPageButton");
     let logOutButton = document.getElementById("logOutButton");
+    let adminButtonFloat = document.getElementById("adminButtonFloat");
+    let userPageButtonFloat = document.getElementById("userPageButtonFloat");
+    let logOutButtonFloat = document.getElementById("logOutButtonFloat");
 
     if (Cookies.get("admin") === "true") {
         adminButton.className = "";
         adminButton.addEventListener("click", () => { location.replace("/admin") });
+        adminButtonFloat.className = "";
+        adminButtonFloat.addEventListener("click", () => { location.replace("/admin") });
     }
     userPageButton.className = "";
+    userPageButtonFloat.className = "";
+
     userPageButton.innerText = Cookies.get("username");
+    userPageButtonFloat.innerText = Cookies.get("username");
+
     logOutButton.className = "";
+    logOutButtonFloat.className = "";
     logOutButton.addEventListener("click", logOut);
+    logOutButtonFloat.addEventListener("click", logOut);
 
     let loginButton = document.getElementById("loginButton");
+    let loginButtonFloat = document.getElementById("loginButtonFloat");
     let signUpButton = document.getElementById("signUpButton");
+    let signUpButtonFloat = document.getElementById("signUpButtonFloat");
 
     loginButton.className = "disabled";
+    loginButtonFloat.className = "disabled";
     signUpButton.className = "disabled";
+    signUpButtonFloat.className = "disabled";
 }
 
 window.onload = (e) => {

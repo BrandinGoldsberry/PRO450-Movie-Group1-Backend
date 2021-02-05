@@ -4,26 +4,21 @@ block content
     form.formWrapper#signupForm
         script(src="https://www.google.com/recaptcha/api.js" async defer)
         h2 Sign Up
-        span.errorMessage#signupError
-        br
+
 
         label(for="registerFName") First Name
         input#registerFName.inputBox(
             required
             type="text"
             name="registerFName")
-
         span.errorMessage#fnameError
-        br
 
         label(for="registerLName") Last Name
         input#registerLName.inputBox(
             type="text"
             required
             name="registerLName")
-
         span.errorMessage#lnameError
-        br
 
         label(for="registerEmail") Email
         input#registerEmail.inputBox(
@@ -31,27 +26,21 @@ block content
             type="email"
             name="registerEmail"
             className="inputBox")
-
         span.errorMessage#emailError
-        br
 
         label(for="registerState") State
         input#registerState.inputBox(
             required
             type="text"
             name="registerState")
-
         span.errorMessage#stateError
-        br
 
         label(for="registerStreet") Street
         input#registerStreet.inputBox(
             required
             type="text"
             name="registerStreet")
-
         span.errorMessage#streetError
-        br
 
         label(for="registerCity") City
         input#registerCity.inputBox(
@@ -59,7 +48,6 @@ block content
             type="text"
             name="registerCity")
         span.errorMessage#cityError
-        br
 
         label(for="registerZipCode") Zip Code
         input#registerZipCode.inputBox(
@@ -67,14 +55,12 @@ block content
             type="text"
             name="registerZipCode")
         span.errorMessage#zipcodeError
-        br
 
         label(for="registerPhone") Phone Number
         input#registerPhone.inputBox(
             type="text"
             name="registerPhone")
         span.errorMessage#phoneError
-        br
 
         label(for="registerPassword") Password
         input#registerPassword.inputBox(
@@ -82,16 +68,13 @@ block content
             type="password"
             name="registerPassword")
         span.errorMessage#passError
-        br
 
         div#recaptcha.g-recaptcha(data-sitekey="6LfU2zoaAAAAAE8uHnF4kc5vYMqIcNodmLXJymiK"
         data-callback="onSignupCaptchaCompleted"
         data-size="invisible")
-        br
+
+        input.inputButton(type="submit" value="Sign Up")
+        span.errorMessage#signupError
 
         p Already have an account? 
-        br
-        a(href="/login")
-
-        br
-        input.inputButton(type="submit" value="Sign Up")
+            a(href="/login") Login
